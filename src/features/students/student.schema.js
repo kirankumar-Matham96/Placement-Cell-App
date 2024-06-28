@@ -13,22 +13,8 @@ const studentSchema = new Schema({
     WebDev: { type: Number, required: true },
     React: { type: Number, required: true },
   },
-  interviews: [
-    {
-      company: { type: String, required: true },
-      date: { type: Date, required: true },
-    },
-  ],
-  results: [
-    {
-      company: { type: String, required: true },
-      result: {
-        type: String,
-        enum: ["PASS", "FAIL", "On Hold", "Didn't Attempt"],
-        required: true,
-      },
-    },
-  ],
+  interviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Interviews" }],
+  results: [{ type: mongoose.Schema.Types.ObjectId, ref: "Results" }],
 });
 
 export const StudentModel = model("Students", studentSchema);
