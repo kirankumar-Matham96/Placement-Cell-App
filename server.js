@@ -2,6 +2,9 @@
 import express from "express";
 import "dotenv/config";
 
+// module imports
+import { connectToDB } from "./src/config/db.config.js";
+
 // constants
 const PORT = process.env.PORT;
 
@@ -12,10 +15,8 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-  res.send("Welcome");
-});
-
+// listening to portal
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
+  connectToDB();
 });
