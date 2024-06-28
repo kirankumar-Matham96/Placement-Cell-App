@@ -37,6 +37,7 @@ class UserController {
           .status(200)
           .cookie("token", token, {
             expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+            httpOnly: true,
           })
           .json({ success: true, message: "user logged in...", token });
       }
@@ -51,7 +52,9 @@ class UserController {
     try {
       res
         .status(200)
-        .cookie("token", null, { expires: new Date(Date.now()), httpOnly: true })
+        .clearCookie("token", {
+          httpOnly: true,
+        })
         .json({ success: true, message: "user logged out..." });
     } catch (error) {
       console.log(error);
