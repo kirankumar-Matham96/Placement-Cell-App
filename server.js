@@ -4,6 +4,7 @@ import "dotenv/config";
 
 // module imports
 import { connectToDB } from "./src/config/db.config.js";
+import userRoutes from "./src/features/users/user.routes.js";
 
 // constants
 const PORT = process.env.PORT;
@@ -14,6 +15,8 @@ const app = express();
 // setting up input formats
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use("/api/placement-cell/users/",userRoutes);
 
 // listening to portal
 app.listen(PORT, () => {
