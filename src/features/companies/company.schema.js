@@ -14,8 +14,10 @@ const companySchema = new Schema({
       },
       result: {
         type: String,
-        enum: []
-      }
+        enum: [],
+      },
     },
   ],
 });
+
+export const CompanyModel = model("Companies", companySchema);
