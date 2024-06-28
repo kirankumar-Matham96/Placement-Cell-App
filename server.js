@@ -5,6 +5,7 @@ import "dotenv/config";
 // module imports
 import { connectToDB } from "./src/config/db.config.js";
 import userRoutes from "./src/features/users/user.routes.js";
+import { errorHandlingMiddleware } from "./src/middlewares/errorHandling.Middleware.js";
 
 // constants
 const PORT = process.env.PORT;
@@ -16,7 +17,10 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/placement-cell/users/",userRoutes);
+app.use("/api/placement-cell/users/", userRoutes);
+
+// app level error handling middleware
+app.use(errorHandlingMiddleware);
 
 // listening to portal
 app.listen(PORT, () => {
