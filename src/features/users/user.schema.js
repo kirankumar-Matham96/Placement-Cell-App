@@ -7,8 +7,6 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, select: false },
   joinedAt: { type: Date, default: new Date() },
-  signInToken: { type: String },
-  signInTokenExpiresAt: { type: Date },
 });
 
 // hashing the password

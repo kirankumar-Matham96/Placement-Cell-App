@@ -44,14 +44,6 @@ class UserRepository {
       throw error;
     }
   };
-
-  static signOut = async () => {
-    try {
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  };
 }
 
 export default UserRepository;
