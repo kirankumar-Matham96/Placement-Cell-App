@@ -4,17 +4,29 @@ const companySchema = new Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
+  interviews: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Interviews",
+      required: true,
+    },
+  ],
   students: [
     {
-      student: {
+      studentId: {
         type: Schema.Types.ObjectId,
         ref: "Students",
         required: true,
       },
-      result: {
-        type: String,
-        enum: [],
+      interviewId: {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: "Interviews",
+      },
+      resultId: {
+        type: Schema.Types.ObjectId,
       },
     },
   ],

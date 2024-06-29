@@ -10,7 +10,7 @@ const companyController = new CompanyController();
 router.post("/add", companyController.addCompany);
 router.get("/", companyController.getCompanies);
 router.get("/:id", companyController.getCompany);
-router.update("/:id", companyController.updateCompany);
+router.put("/:id", companyController.updateCompany);
 router.delete("/:id", companyController.deleteCompany);
 
 export default router;

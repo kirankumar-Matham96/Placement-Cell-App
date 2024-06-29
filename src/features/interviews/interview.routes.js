@@ -1,16 +1,16 @@
 // package imports
-import mongoose from "mongoose";
+import express from "express";
 
 // module imports
 import { InterviewController } from "./interview.controller.js";
 
-const router = mongoose.Router();
+const router = express.Router();
 const interviewController = new InterviewController();
 
-router.post("/create", interviewController.createInterview);
+router.post("/add", interviewController.createInterview);
 router.get("/:id", interviewController.getInterviewById);
-router.get("/all", interviewController.getAllInterviews);
-router.put("/update", interviewController.updateInterview);
-router.delete("/delete", interviewController.deleteInterview);
+router.get("/", interviewController.getAllInterviews);
+router.put("/:id", interviewController.updateInterview);
+router.delete("/:id", interviewController.deleteInterview);
 
 export default router;
