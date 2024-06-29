@@ -1,9 +1,27 @@
 import { ResultRepository } from "./result.repository.js";
+import { CompanyRepository } from "../companies/company.repository.js";
+import StudentRepository from "../students/student.repository.js";
 
 export class ResultController {
   addResult = async (req, res, next) => {
     try {
+      const { companyId, interviewId, studentId } = req.body;
+
       const result = await ResultRepository.add(req.body);
+      // update company
+      await CompanyRepository.update(companyId, {
+        interviewId,
+        studentId,
+        resultId: result._id,
+      });
+
+      // update student
+      await StudentRepository.update(studentId, {
+        interviewId,
+        resultId: result._id,
+        status: result.result === "PASS" ? "placed" : "not_placed",
+      });
+
       res
         .status(200)
         .json({ success: true, message: "result added successfully", result });
@@ -34,7 +52,15 @@ export class ResultController {
   updateResult = async (req, res, next) => {
     try {
       const { id } = req.params;
-      const result = await ResultRepository.update(id);
+      const result = await ResultRepository.update(id, req.body);
+
+      if (req.body.result) {
+        // update student status
+        await StudentRepository.update(result.studentId, {
+          status: result.result === "PASS" ? "placed" : "not_placed",
+        });
+      }
+
       res.status(200).json({
         success: true,
         message: "result updated successfully",

@@ -5,6 +5,7 @@ import { ApplicationError } from "../../middlewares/errorHandling.Middleware.js"
 class StudentRepository {
   static add = async (data) => {
     try {
+      // creating new result
       const newStudent = new StudentModel(data);
       return newStudent.save();
     } catch (error) {
@@ -35,14 +36,6 @@ class StudentRepository {
 
   static update = async (studentId, data) => {
     try {
-      // const response = await StudentModel.findByIdAndUpdate(
-      //   studentId,
-      //   {
-      //     ...data,
-      //   },
-      //   { returnDocument: "after" }
-      // );
-
       const student = await StudentModel.findById(studentId);
       if (!student) {
         throw new ApplicationError("student not found", 404);
@@ -74,6 +67,7 @@ class StudentRepository {
           ? data.scores.React
           : student.scores.React;
       }
+
       if (data.interviewId) {
         const interviewFound = student.interviews.find(
           (interview) => interview.toString() === data.interviewId
@@ -82,10 +76,17 @@ class StudentRepository {
           student.interviews.push(data.interviewId);
         }
       }
+
       if (data.resultId) {
-        const resultFound = student.results.find(data.resultId);
-        if (!resultFound) {
-          student.results.push(data.resultFound);
+        if (student.results.length > 0) {
+          student.results.push(data.resultId);
+        } else {
+          const isResultExists = student.results.find(
+            (result) => result.toString() === data.resultId
+          );
+          if (!isResultExists) {
+            student.results.push(data.resultId);
+          }
         }
       }
 

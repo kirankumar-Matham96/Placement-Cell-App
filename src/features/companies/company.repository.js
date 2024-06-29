@@ -61,29 +61,19 @@ export class CompanyRepository {
       }
 
       if (data.studentId && data.interviewId && data.resultId) {
-        console.log(
-          "if student exists in the list => ",
-          company.students.includes(
-            mongoose.Types.ObjectId.createFromHexString(data.studentId)
-          )
+        const studentIndex = company.students.findIndex(
+          (student) =>
+            student.studentId.toString() === data.studentId &&
+            student.interviewId.toString() === data.interviewId
         );
-        if (
-          !company.students.includes(
-            mongoose.Types.ObjectId.createFromHexString(data.studentId)
-          )
-        ) {
-          company.students.push({
-            studentId: data.studentId,
-            interviewId: data.interviewId,
-            resultId: data.resultId,
-          });
-        } else {
-          // find the object and update
-          const student = company.students.find(
-            (student) => student.studentId.toString() === data.studentId
-          );
-          student.resultId = data.resultId;
+
+        if (studentIndex == -1) {
+          throw new ApplicationError("student details not found", 404);
         }
+
+        // add result id to the student details
+        company.students[studentIndex].resultId = data.resultId;
+        console.log("in company update repo");
       } else if (data.studentId && data.interviewId) {
         const isStudentExists = company.students.findIndex(
           (student) =>

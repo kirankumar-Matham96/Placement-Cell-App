@@ -1,19 +1,25 @@
 import mongoose from "mongoose";
 
 const resultSchema = new mongoose.Schema({
-  student: {
+  studentId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Students",
     required: true,
   },
-  company: {
+  companyId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Companies",
+    required: true,
+  },
+  interviewId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Interviews",
     required: true,
   },
   result: {
     type: String,
     enum: ["PASS", "FAIL", "On Hold", "Didn't Attempt"],
+    required: true,
   },
 });
 

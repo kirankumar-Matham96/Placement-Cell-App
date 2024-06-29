@@ -5,6 +5,18 @@ import { ApplicationError } from "../../middlewares/errorHandling.Middleware.js"
 export class ResultRepository {
   static add = async (data) => {
     try {
+      const { studentId, companyId, interviewId } = data;
+      // if result already exists
+      const isResultExists = ResultModel.findOne({
+        studentId,
+        companyId,
+        interviewId,
+      });
+
+      if (isResultExists) {
+        throw new ApplicationError("result already exists", 400);
+      }
+
       return await ResultModel(data).save();
     } catch (error) {
       throw error;
