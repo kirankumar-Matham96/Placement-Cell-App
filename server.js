@@ -2,6 +2,7 @@
 import express from "express";
 import "dotenv/config";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 // module imports
 import { connectToDB } from "./src/config/db.config.js";
@@ -21,6 +22,7 @@ const app = express();
 
 // adding cookie parser
 app.use(cookieParser());
+app.use(cors());
 
 // setting up input formats
 app.use(express.json());
