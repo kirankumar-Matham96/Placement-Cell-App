@@ -42,7 +42,31 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                <a
+                  class="nav-link active"
+                  id="home-link"
+                  aria-current="page"
+                  href="#"
+                  >Home</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  id="students-link"
+                  aria-current="page"
+                  href="#"
+                  >Students</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  id="interviews-link"
+                  aria-current="page"
+                  href="#"
+                  >Interviews</a
+                >
               </li>
             </ul>
             <div class="login-status-container">
@@ -168,6 +192,7 @@
                 <input
                   type="number"
                   class="form-control"
+                  name="DSA"
                   aria-label="DSA"
                   aria-describedby="basic-addon1"
                 />
@@ -179,6 +204,7 @@
                 <input
                   type="number"
                   class="form-control"
+                  name="Web Development"
                   aria-label="Web Development"
                   aria-describedby="basic-addon1"
                 />
@@ -188,6 +214,7 @@
                 <input
                   type="number"
                   class="form-control"
+                  name="React"
                   aria-label="React"
                   aria-describedby="basic-addon1"
                 />
@@ -198,103 +225,181 @@
           </form>
         </div>
 
+        <button class="btn btn-primary" id="add-student-btn">
+          Add Student
+        </button>
         <!-- students list -->
-        <div class="accordion" id="accordionExample">
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button
-                class="accordion-button"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseOne"
-                aria-expanded="true"
-                aria-controls="collapseOne"
-              >
-                Accordion Item #1
-              </button>
-            </h2>
-            <div
-              id="collapseOne"
-              class="accordion-collapse collapse show"
-              data-bs-parent="#accordionExample"
-            >
-              <div class="accordion-body">
-                <strong>This is the first item's accordion body.</strong> It is
-                shown by default, until the collapse plugin adds the appropriate
-                classes that we use to style each element. These classes control
-                the overall appearance, as well as the showing and hiding via
-                CSS transitions. You can modify any of this with custom CSS or
-                overriding our default variables. It's also worth noting that
-                just about any HTML can go within the
-                <code>.accordion-body</code>, though the transition does limit
-                overflow.
-              </div>
-            </div>
-          </div>
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button
-                class="accordion-button collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseTwo"
-                aria-expanded="false"
-                aria-controls="collapseTwo"
-              >
-                Accordion Item #2
-              </button>
-            </h2>
-            <div
-              id="collapseTwo"
-              class="accordion-collapse collapse"
-              data-bs-parent="#accordionExample"
-            >
-              <div class="accordion-body">
-                <strong>This is the second item's accordion body.</strong> It is
-                hidden by default, until the collapse plugin adds the
-                appropriate classes that we use to style each element. These
-                classes control the overall appearance, as well as the showing
-                and hiding via CSS transitions. You can modify any of this with
-                custom CSS or overriding our default variables. It's also worth
-                noting that just about any HTML can go within the
-                <code>.accordion-body</code>, though the transition does limit
-                overflow.
-              </div>
-            </div>
-          </div>
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button
-                class="accordion-button collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseThree"
-                aria-expanded="false"
-                aria-controls="collapseThree"
-              >
-                Accordion Item #3
-              </button>
-            </h2>
-            <div
-              id="collapseThree"
-              class="accordion-collapse collapse"
-              data-bs-parent="#accordionExample"
-            >
-              <div class="accordion-body">
-                <strong>This is the third item's accordion body.</strong> It is
-                hidden by default, until the collapse plugin adds the
-                appropriate classes that we use to style each element. These
-                classes control the overall appearance, as well as the showing
-                and hiding via CSS transitions. You can modify any of this with
-                custom CSS or overriding our default variables. It's also worth
-                noting that just about any HTML can go within the
-                <code>.accordion-body</code>, though the transition does limit
-                overflow.
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="accordion" id="student-accordion"></div>
       </div>
+
+      <!-- interviews -->
+      <div class="container my-5 interviews-bg-container">
+        <!-- create interview section -->
+        <div
+          class="d-none container px-5 d-flex flex-column align-items-center add-new-interview-container"
+        >
+          <h1 class="text-center">Schedule Interview</h1>
+          <form
+            class="d-flex flex-column align-items-center add-new-interview-form-container"
+          >
+            <!-- dropdown start -->
+            <div class="input-group mt-3">
+              <label class="input-group-text" for="company-options"
+                >Company</label
+              >
+              <select class="form-select" id="company-options">
+                <option selected>Choose...</option>
+              </select>
+            </div>
+            <!-- dropdown end -->
+            <input
+              required
+              type="text"
+              class="form-control mt-3 position"
+              name="position"
+              id="interview-position"
+              placeholder="Enter Job Position/Designation"
+            />
+            <input
+              required
+              type="datetime-local"
+              class="form-control mt-3 date"
+              name="date"
+              id="interview-date"
+            />
+
+            <button type="submit" class="btn btn-primary">Schedule</button>
+          </form>
+        </div>
+
+        <!-- allocate student to interview section -->
+        <div
+          class="d-none container px-5 d-flex flex-column align-items-center allocate-student-to-interview-container"
+        >
+          <h1 class="text-center">Allocate Student to Interview</h1>
+          <form
+            class="d-flex flex-column align-items-center allocate-student-to-interview-form-container"
+          >
+            <div class="input-group mt-3">
+              <label class="input-group-text" for="interview-options"
+                >Interview</label
+              >
+              <select class="form-select" id="interview-options">
+                <option selected>Choose...</option>
+              </select>
+            </div>
+            <div class="input-group mt-3">
+              <label class="input-group-text" for="student-options"
+                >Student</label
+              >
+              <select class="form-select" id="student-options">
+                <option selected>Choose...</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Schedule</button>
+          </form>
+        </div>
+
+        <button class="btn btn-primary" id="show-interview-form-btn">
+          Schedule Interview
+        </button>
+        <button
+          class="btn btn-primary"
+          id="show-allocate-student-to-interview-form-btn"
+        >
+          Allocate Student to Interview
+        </button>
+        <!-- students list -->
+        <div class="accordion" id="interview-accordion"></div>
+      </div>
+
+      <!-- companies -->
+      <!-- <div class="container my-5 students-bg-container">
+        <div
+          class="d-none container px-5 d-flex flex-column align-items-center add-new-student-container"
+        >
+          <h1 class="text-center">Add Student</h1>
+          <form
+            class="d-flex flex-column align-items-center add-new-student-form-container"
+          >
+            <input
+              required
+              type="text"
+              class="form-control mt-3 batch"
+              name="student-batch"
+              id="student-batch"
+              placeholder="Enter student's batch"
+            />
+            <input
+              required
+              type="text"
+              class="form-control mt-3 name"
+              name="student-name"
+              id="student-name"
+              placeholder="Enter student's name"
+            />
+            <input
+              required
+              type="email"
+              class="form-control mt-3 email"
+              name="student-email"
+              id="student-email"
+              placeholder="Enter student's email"
+            />
+            <input
+              required
+              type="text"
+              class="form-control my-3 college"
+              name="student-college"
+              id="student-college"
+              placeholder="Enter student's college"
+            />
+            <div class="scores">
+              <label class="text-dark scores-label">Scores:</label>
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">DSA</span>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="DSA"
+                  aria-label="DSA"
+                  aria-describedby="basic-addon1"
+                />
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"
+                  >Web Development</span
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  name="Web Development"
+                  aria-label="Web Development"
+                  aria-describedby="basic-addon1"
+                />
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">React</span>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="React"
+                  aria-label="React"
+                  aria-describedby="basic-addon1"
+                />
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add</button>
+          </form>
+        </div>
+
+        <button class="btn btn-primary" id="add-student-btn">
+          Add Student
+        </button> -->
+      <!-- students list -->
+      <!-- <div class="accordion" id="student-accordion"></div> -->
+      <!-- </div> -->
     </div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -304,8 +409,46 @@
     <script src="./index.js"></script>
     <script>
       // elements
+      const homeLinkEl = document.querySelector("#home-link");
+      const studentsLinkEl = document.querySelector("#students-link");
+      const interviewsLinkEl = document.querySelector("#interviews-link");
       const registrationFormEl = document.querySelector(".registration-form");
       const loginFormEl = document.querySelector(".login-form");
+      const addStudentFormEl = document.querySelector(
+        ".add-new-student-form-container"
+      );
+      const addStudentBtnEl = document.querySelector("#add-student-btn");
+      const studentsListsContainerEl =
+        document.querySelector("#student-accordion");
+      const addStudentContainerEl = document.querySelector(
+        ".add-new-student-container"
+      );
+      const showInterviewFormBtnEl = document.querySelector(
+        "#show-interview-form-btn"
+      );
+      const interviewBGContainerEl = document.querySelector(
+        ".add-new-interview-container"
+      );
+      const interviewAddingFormEl = document.querySelector(
+        ".add-new-interview-form-container"
+      );
+      const companyOptionsEl = document.querySelector("#company-options");
+      const interviewDateEl = document.querySelector("#interview-date");
+      interviewDateEl.min = new Date().toISOString().slice(0, -8);
+      const showStudentInterviewAllocationFormBtnEl = document.querySelector(
+        "#show-allocate-student-to-interview-form-btn"
+      );
+      const allocateStudentToAnInterviewContainerEl = document.querySelector(
+        ".allocate-student-to-interview-container"
+      );
+      const allocateStudentToAnInterviewFormEl = document.querySelector(
+        ".allocate-student-to-interview-form-container"
+      );
+      const interviewOptionsContainerEl =
+        document.querySelector("#interview-options");
+      const studentOptionsContainerEl =
+        document.querySelector("#student-options");
+
       registrationFormEl.addEventListener("submit", (event) => {
         event.preventDefault();
         signUp(event);
@@ -315,6 +458,206 @@
         event.preventDefault();
         signIn(event);
       });
+
+      addStudentFormEl.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        await addStudent(event);
+      });
+
+      addStudentBtnEl.addEventListener("click", () => {
+        addStudentContainerEl.classList.contains("d-none")
+          ? addStudentContainerEl.classList.remove("d-none")
+          : null;
+      });
+
+      function setDateFormat(dateStr) {
+        try {
+          const dateObj = new Date(dateStr);
+          const year = dateObj.getFullYear();
+          const month =
+            dateObj.getMonth() + 1 < 10
+              ? "0" + (dateObj.getMonth() + 1)
+              : dateObj.getMonth() + 1;
+          const date =
+            dateObj.getDate() < 10
+              ? "0" + dateObj.getDate()
+              : dateObj.getDate();
+          let hours = dateObj.getHours();
+          const minutes =
+            dateObj.getMinutes() < 10
+              ? "0" + dateObj.getMinutes()
+              : dateObj.getMinutes();
+          const ampm = hours >= 12 ? "PM" : "AM";
+
+          hours = hours % 12;
+          hours = hours ? hours : 12;
+          hours = hours < 10 ? "0" + hours : hours;
+
+          return `${date}-${month}-${year} AT ${hours}:${minutes} ${ampm}`;
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      function createStudents(students) {
+        studentsListsContainerEl.innerHTML = "";
+        students.forEach((student) => {
+          const accordionItemEl = document.createElement("div");
+          accordionItemEl.classList.add("accordion-item");
+          accordionItemEl.innerHTML = `
+          <h2 class="accordion-header">
+            <button
+            class="accordion-button"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#${student._id}"
+            aria-expanded="false"
+            aria-controls="${student._id}"
+            >
+            <h5>
+              ${student.name}
+              </h5>
+            </button>
+            </h2>
+            <div
+              id="${student._id}"
+              class="accordion-collapse collapse"
+              data-bs-parent="#accordionExample"
+            >
+              <div class="accordion-body">
+                <p><strong>Batch:</strong> ${student.batch}</p>
+                <p><strong>Email:</strong> ${student.email}</p>
+                <p><strong>College:</strong> ${student.college}</p>
+
+                <span><strong>Scores:</strong></span><br/>
+
+                <span><strong>&nbsp;&nbsp;DSA:</strong> ${
+                  student.scores.DSA
+                }</span><br/>
+
+                <span><strong>&nbsp;&nbsp;Web Development:</strong> ${
+                  student.scores.WebDev
+                }</span><br/>
+
+                <span><strong>&nbsp;&nbsp;React:</strong> ${
+                  student.scores.React
+                }</span>
+                <br/>
+                <br/>
+                <p><strong>Status:</strong> ${student.status}</p>
+                <div><strong>Interviews Allotted:</strong> ${student.interviews.map(
+                  (item) => `
+                      <div>
+                        <span><strong>&nbsp;&nbsp;CompanyId</strong>: ${
+                          item.companyId
+                        }</span><br/>
+                        <span><strong>&nbsp;&nbsp;Position For</strong>: ${
+                          item.position
+                        }</span><br/>
+                        <span><strong>&nbsp;&nbsp;Date</strong>: ${setDateFormat(
+                          item.date
+                        )}</span>
+                      </div>
+                      <br/>
+                    `
+                )}</div>
+              </div>
+            </div>
+              `;
+
+          studentsListsContainerEl.appendChild(accordionItemEl);
+        });
+      }
+
+      studentsLinkEl.addEventListener("click", async () => {
+        try {
+          const students = await getStudents();
+          // populate the students in the accordions
+          createStudents(students);
+        } catch (error) {
+          console.log(error);
+        }
+      });
+
+      function createOptions(optionsContainerEl, list) {
+        console.log({ list });
+        optionsContainerEl.innerHTML = "<option selected>Choose...</option>";
+        list.map((item) => {
+          const optionEl = document.createElement("option");
+          optionEl.value = item._id;
+          optionEl.id = item._id;
+          optionEl.textContent = item.name;
+
+          if (item.interviewId) {
+            optionEl.value = optionEl.value + "-and-" + item.interviewId;
+          }
+
+          console.log("id => ", optionEl.id);
+
+          optionsContainerEl.appendChild(optionEl);
+        });
+      }
+
+      showInterviewFormBtnEl.addEventListener("click", async () => {
+        console.log("clicked");
+
+        interviewBGContainerEl.classList.contains("d-none")
+          ? interviewBGContainerEl.classList.remove("d-none")
+          : null;
+
+        // call API to get companies
+        const companies = await getCompanies();
+
+        // create Elements here
+        createOptions(companyOptionsEl, companies);
+      });
+
+      interviewAddingFormEl.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        // call function to add interview
+        await scheduleInterview(event);
+        // hide section
+        interviewBGContainerEl.classList.add("d-none");
+      });
+
+      showStudentInterviewAllocationFormBtnEl.addEventListener(
+        "click",
+        async () => {
+          allocateStudentToAnInterviewContainerEl.classList.contains("d-none")
+            ? allocateStudentToAnInterviewContainerEl.classList.remove("d-none")
+            : null;
+
+          const interviews = await getInterviews();
+          // needs value, _id, name
+          const companiesList = interviews
+            .filter((item) => new Date(item.date) >= new Date())
+            .map((item) => {
+              console.log({ item });
+              return {
+                name: `${item.companyId.name} - ${item.position}`,
+                _id: item.companyId._id,
+                interviewId: item._id,
+              };
+            });
+
+          // populate interview options
+          console.log("Calling companies to render => \n\n");
+          createOptions(interviewOptionsContainerEl, companiesList);
+
+          // get students and populate options
+          console.log("Calling students to render => \n\n");
+          createOptions(studentOptionsContainerEl, await getStudents());
+        }
+      );
+
+      allocateStudentToAnInterviewFormEl.addEventListener(
+        "submit",
+        async (event) => {
+          event.preventDefault();
+          // post allocate interview form
+          await allocateStudentToAnInterview(event);
+        }
+      );
     </script>
   </body>
 </html>

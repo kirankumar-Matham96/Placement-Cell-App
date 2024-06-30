@@ -6,7 +6,19 @@ import { ApplicationError } from "./errorHandling.Middleware.js";
 
 export const auth = (req, res, next) => {
   try {
-    const { token } = req.cookies;
+    let token = "";
+
+    if (req.cookies.token) {
+      token = req.cookies.token;
+    } else {
+      const authHeaders = req.headers.authorization;
+      if (authHeaders.includes("Bearer")) {
+        token = authHeaders.split(" ")[1];
+      } else {
+        token = authHeaders;
+      }
+    }
+
     if (!token) {
       throw new ApplicationError("token not provided", 401);
     }
@@ -15,9 +27,7 @@ export const auth = (req, res, next) => {
     if (!tokenPayload) {
       throw new ApplicationError("invalid token", 403);
     }
-
     req.userId = tokenPayload.id;
-
     next();
   } catch (error) {
     console.log(error);

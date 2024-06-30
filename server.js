@@ -20,13 +20,35 @@ const PORT = process.env.PORT;
 // initializing express app
 const app = express();
 
+app.use(
+  cors({
+    origin: "*",
+    credentials: true,
+  })
+);
 // adding cookie parser
 app.use(cookieParser());
-app.use(cors());
 
 // setting up input formats
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use((req, res, next) => {
+  res.set('Access-Control-Allow-Origin', 'http://127.0.0.1:5500'); // Replace with your frontend domain
+  res.set('Access-Control-Allow-Credentials', 'true');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.set(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
 
 app.use("/api/placement-cell/users", userRoutes);
 app.use("/api/placement-cell/students", auth, studentRoutes);

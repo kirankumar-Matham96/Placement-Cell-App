@@ -4,6 +4,7 @@ import StudentRepository from "./student.repository.js";
 class StudentController {
   addStudent = async (req, res, next) => {
     try {
+      console.log(req.body);
       const student = await StudentRepository.add(req.body);
       res.status(201).json({ success: true, student });
     } catch (error) {

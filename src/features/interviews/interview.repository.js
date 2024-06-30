@@ -17,7 +17,9 @@ export class InterviewRepository {
 
   static get = async (interviewId) => {
     try {
-      const response = await InterviewModel.findById(interviewId);
+      const response = await InterviewModel.findById(interviewId)
+        .populate("Companies")
+        .populate("Students");
       if (!response) {
         throw new ApplicationError("interview not found", 404);
       }
@@ -29,7 +31,9 @@ export class InterviewRepository {
 
   static getAll = async () => {
     try {
-      return await InterviewModel.find();
+      return await InterviewModel.find()
+        .populate("companyId")
+        .populate("students");
     } catch (error) {
       throw error;
     }

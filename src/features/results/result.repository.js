@@ -25,7 +25,7 @@ export class ResultRepository {
 
   static get = async (resultId) => {
     try {
-      const result = await ResultModel.findById(resultId);
+      const result = await ResultModel.findById(resultId).populate("Students").populate("Companies").populate("Interviews");
       if (!result) {
         throw new ApplicationError("result ot found", 404);
       }
@@ -37,7 +37,7 @@ export class ResultRepository {
 
   static getAll = async () => {
     try {
-      return await ResultModel.find();
+      return await ResultModel.find().populate("Students").populate("Companies").populate("Interviews");
     } catch (error) {
       throw error;
     }

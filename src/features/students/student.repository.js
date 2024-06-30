@@ -15,7 +15,15 @@ class StudentRepository {
 
   static getAll = async () => {
     try {
-      return await StudentModel.find();
+      // return await StudentModel.find()
+      //   .populate("results")
+      //   .populate("interviews");
+      const students = await StudentModel.find()
+        .populate("results")
+        .populate("interviews");
+
+      console.log({ students });
+      return students;
     } catch (error) {
       throw error;
     }
@@ -23,7 +31,9 @@ class StudentRepository {
 
   static get = async (studentId) => {
     try {
-      const student = await StudentModel.findById(studentId);
+      const student = await StudentModel.findById(studentId)
+        .populate("results")
+        .populate("interviews");
       if (!student) {
         throw new ApplicationError("student not found", 403);
       }

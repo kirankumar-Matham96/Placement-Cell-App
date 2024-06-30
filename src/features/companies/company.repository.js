@@ -15,7 +15,9 @@ export class CompanyRepository {
 
   static get = async (companyId) => {
     try {
-      const response = await CompanyModel.findById(companyId);
+      const response = await CompanyModel.findById(companyId)
+        .populate("Interviews")
+        .populate("Students");
       if (!response) {
         throw new ApplicationError("company not found", 404);
       }
@@ -27,7 +29,9 @@ export class CompanyRepository {
 
   static getAll = async () => {
     try {
-      return await CompanyModel.find();
+      return await CompanyModel.find()
+        .populate("interviews")
+        .populate("students");
     } catch (error) {
       throw error;
     }
