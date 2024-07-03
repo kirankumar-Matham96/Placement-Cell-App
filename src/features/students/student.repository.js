@@ -3,54 +3,52 @@ import { StudentModel } from "./student.schema.js";
 import { ApplicationError } from "../../middlewares/errorHandling.Middleware.js";
 
 class StudentRepository {
+  // Add a new student
   static add = async (data) => {
     try {
-      // creating new result
       const newStudent = new StudentModel(data);
-      return newStudent.save();
+      return await newStudent.save();
     } catch (error) {
       throw error;
     }
   };
 
+  // Get all students with populated results and interviews
   static getAll = async () => {
     try {
-      // return await StudentModel.find()
-      //   .populate("results")
-      //   .populate("interviews");
       const students = await StudentModel.find()
         .populate("results")
         .populate("interviews");
-
-      console.log({ students });
       return students;
     } catch (error) {
       throw error;
     }
   };
 
+  // Get a student by ID with populated results and interviews
   static get = async (studentId) => {
     try {
       const student = await StudentModel.findById(studentId)
         .populate("results")
         .populate("interviews");
       if (!student) {
-        throw new ApplicationError("student not found", 403);
+        throw new ApplicationError("Student not found", 404);
       }
-
       return student;
     } catch (error) {
       throw error;
     }
   };
 
+  // Update a student by ID
   static update = async (studentId, data) => {
     try {
       const student = await StudentModel.findById(studentId);
       if (!student) {
-        throw new ApplicationError("student not found", 404);
+        throw new ApplicationError("Student not found", 404);
       }
 
+      // Update student fields if provided in data
       if (data.batch) {
         student.batch = data.batch;
       }
@@ -67,17 +65,12 @@ class StudentRepository {
         student.status = data.status;
       }
       if (data.scores) {
-        student.scores.DSA = data.scores.DSA
-          ? data.scores.DSA
-          : student.scores.DSA;
-        student.scores.WebDev = data.scores.WebDev
-          ? data.scores.WebDev
-          : student.scores.WebDev;
-        student.scores.React = data.scores.React
-          ? data.scores.React
-          : student.scores.React;
+        student.scores.DSA = data.scores.DSA ?? student.scores.DSA;
+        student.scores.WebDev = data.scores.WebDev ?? student.scores.WebDev;
+        student.scores.React = data.scores.React ?? student.scores.React;
       }
 
+      // Add interview ID to student if provided
       if (data.interviewId) {
         const interviewFound = student.interviews.find(
           (interview) => interview.toString() === data.interviewId
@@ -87,35 +80,30 @@ class StudentRepository {
         }
       }
 
+      // Add result ID to student if provided
       if (data.resultId) {
-        if (student.results.length > 0) {
+        const isResultExists = student.results.find(
+          (result) => result.toString() === data.resultId
+        );
+        if (!isResultExists) {
           student.results.push(data.resultId);
-        } else {
-          const isResultExists = student.results.find(
-            (result) => result.toString() === data.resultId
-          );
-          if (!isResultExists) {
-            student.results.push(data.resultId);
-          }
         }
       }
 
       const response = await student.save();
-
       return response;
     } catch (error) {
-      console.log("error student repo => ", error);
       throw error;
     }
   };
 
+  // Delete a student by ID
   static delete = async (studentId) => {
     try {
       const response = await StudentModel.findByIdAndDelete(studentId);
       if (!response) {
-        throw new ApplicationError("student not found", 404);
+        throw new ApplicationError("Student not found", 404);
       }
-
       return response;
     } catch (error) {
       throw error;

@@ -3,14 +3,13 @@ import { Schema, model } from "mongoose";
 const companySchema = new Schema({
   name: {
     type: String,
-    required: true,
     unique: true,
+    required: true,
   },
   interviews: [
     {
-      type: Schema.Types.ObjectId,
-      ref: "Interviews",
-      required: true,
+      designation: { type: String, required: true },
+      lastDate: { type: Date, required: true },
     },
   ],
   students: [
@@ -22,8 +21,8 @@ const companySchema = new Schema({
       },
       interviewId: {
         type: Schema.Types.ObjectId,
-        required: true,
         ref: "Interviews",
+        required: true,
       },
       resultId: {
         type: Schema.Types.ObjectId,

@@ -7,6 +7,7 @@ const interviewSchema = new mongoose.Schema({
     required: true,
   },
   date: { type: Date, required: true },
+  lastDate: { type: Date, required: true },
   position: { type: String, required: true },
   students: [{ type: mongoose.Schema.Types.ObjectId, ref: "Students" }],
 });

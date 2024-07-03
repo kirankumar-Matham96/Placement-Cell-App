@@ -20,47 +20,52 @@ const PORT = process.env.PORT;
 // initializing express app
 const app = express();
 
+// Enable CORS with specific options
 app.use(
   cors({
-    origin: "*",
+    origin: "*", // Replace with your frontend domain for production
     credentials: true,
   })
 );
-// adding cookie parser
+
+// Adding cookie parser middleware
 app.use(cookieParser());
 
-// setting up input formats
+// Setting up input formats for JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// CORS headers setup for each request
 app.use((req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://127.0.0.1:5500'); // Replace with your frontend domain
-  res.set('Access-Control-Allow-Credentials', 'true');
-  res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  // Set CORS headers
+  res.set("Access-Control-Allow-Origin", "http://127.0.0.1:5500"); // Replace with your frontend domain
+  res.set("Access-Control-Allow-Credentials", "true");
+  res.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.set(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
   );
 
-  // Handle preflight requests
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
+  // Handle preflight requests (OPTIONS)
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200); // Respond OK to OPTIONS requests
   }
 
-  next();
+  next(); // Move to the next middleware or route handler
 });
 
+// Routes setup
 app.use("/api/placement-cell/users", userRoutes);
-app.use("/api/placement-cell/students", auth, studentRoutes);
-app.use("/api/placement-cell/companies", auth, companyRoutes);
-app.use("/api/placement-cell/interviews", auth, interviewRoutes);
-app.use("/api/placement-cell/results", auth, resultRoutes);
+app.use("/api/placement-cell/students", auth, studentRoutes); // Auth middleware added for student routes
+app.use("/api/placement-cell/companies", auth, companyRoutes); // Auth middleware added for company routes
+app.use("/api/placement-cell/interviews", auth, interviewRoutes); // Auth middleware added for interview routes
+app.use("/api/placement-cell/results", auth, resultRoutes); // Auth middleware added for result routes
 
-// app level error handling middleware
+// Error handling middleware for application-level errors
 app.use(errorHandlingMiddleware);
 
-// listening to portal
+// Start listening on the specified port
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
-  connectToDB();
+  connectToDB(); // Connect to the database when server starts
 });

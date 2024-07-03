@@ -9,9 +9,26 @@ body {
 
 .register-container,
 .login-container,
-.add-new-student-container {
+.add-new-student-container,
+.home-container,
+.students-bg-container,
+.interviews-bg-container,
+.jobs-bg-container {
   min-height: 100vh;
 }
 
 .students-bg-container {
+}
+#jobs-list {
+  list-style-type: none;
+}
+.job-list-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.job-company-logo {
+  /* width: 5rem; */
+  height: 5rem;
+  /* border-radius: 20rem; */
 }

@@ -1,46 +1,47 @@
 // package imports
 import bcrypt from "bcrypt";
+
 // module imports
 import { UserModel } from "./user.schema.js";
 import { ApplicationError } from "../../middlewares/errorHandling.Middleware.js";
 
 class UserRepository {
+  // Sign up a new user
   static signUp = async (data) => {
     try {
       const newUser = await new UserModel(data).save();
-      // return await newUser.save();
       return newUser;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   };
 
+  // Sign in user
   static signIn = async (data) => {
     try {
+      // Find user by email and include password field
       const user = await UserModel.findOne({ email: data.email }).select(
         "+password"
       );
 
-      // if user not found
+      // If user not found
       if (!user) {
-        throw new ApplicationError("user not found", 404);
+        throw new ApplicationError("User not found", 404);
       }
 
-      // comparing password
+      // Compare provided password with stored hash
       const isPasswordCorrect = await bcrypt.compare(
         data.password,
         user.password
       );
 
-      // if password is wrong
+      // If password is incorrect
       if (!isPasswordCorrect) {
-        throw new ApplicationError("invalid credentials", 400);
+        throw new ApplicationError("Invalid credentials", 400);
       }
 
-      return true;
+      return user; // Return the user object
     } catch (error) {
-      console.log(error);
       throw error;
     }
   };
