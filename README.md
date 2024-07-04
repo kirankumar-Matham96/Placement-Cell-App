@@ -51,6 +51,32 @@ An application to represent job placement cell. Backend built with the repositor
   - Update
   - Delete
 
+## Frontend Features
+
+1. Home/landing tab
+
+   - In the landing page you can see the welcome message.
+   - It includes Register and Login buttons.
+   - Includes students, interviews and jobs nav links.
+   - Without signin, user cannot visit these links.
+
+2. Students tab
+
+   - Shows the list of students.
+   - The list item can expand to show the student details if exists any.
+   - There are buttons to add a new student to the list and download all students data as CSV file.
+
+3. Interviews tab
+
+   - Shows the list of interviews available.
+   - The list item can expand to show the interview details and students details allocated to it.
+   - There are buttons to schedule a new interview to the list and allocate students to it.
+     NOTE: If there are no interview options in the form options, you can add one from the Jobs tab.
+
+4. Jobs tab
+   - Shows list of jobs available and the required details.
+   - Each job item contains a button that will add the job details to the DB. Once the job is added to the db, you can see the job name and designation in the schedule interview form options.
+
 ## Prerequisites
 
 - Node.js (>=14.x)

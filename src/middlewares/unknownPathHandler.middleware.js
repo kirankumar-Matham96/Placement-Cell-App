@@ -7,11 +7,9 @@ import { ApplicationError } from "./errorHandling.Middleware.js";
  * @param {response} res
  * @param {next middleware callback} next
  */
-const unknownPathHandlerMiddleware = (req, res, next) => {
+export const unknownPathHandlerMiddleware = (req, res, next) => {
   throw new ApplicationError(
     "404 request path not found, please check the request and method",
     404
   );
 };
-
-export default unknownPathHandlerMiddleware;
