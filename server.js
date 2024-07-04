@@ -51,11 +51,20 @@ app.use((req, res, next) => {
   next();
 });
 
+const getUI = (req, res, next) => {
+  try {
+    res.status(200).send("./public/index.html");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 app.use("/api/placement-cell/users", userRoutes);
 app.use("/api/placement-cell/students", auth, studentRoutes);
 app.use("/api/placement-cell/companies", auth, companyRoutes);
 app.use("/api/placement-cell/interviews", auth, interviewRoutes);
 app.use("/api/placement-cell/results", auth, resultRoutes);
+app.get("/ui", getUI);
 app.get("/", (req, res, next) => {
   res.status(200).send({ message: "Welcome to Placement Cell" });
 });
