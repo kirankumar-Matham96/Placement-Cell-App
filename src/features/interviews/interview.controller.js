@@ -55,7 +55,6 @@ export class InterviewController {
         // updating the student
         await StudentRepository.update(studentId, { interviewId });
       }
-      console.log("\n\n\nCompleted updating company and student\n\n\n");
       res.status(200).json({ success: true, interview });
     } catch (error) {
       next(error);

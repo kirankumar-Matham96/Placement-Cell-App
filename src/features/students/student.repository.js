@@ -123,7 +123,6 @@ class StudentRepository {
 
       return response;
     } catch (error) {
-      console.log("error student repo => ", error);
       throw error;
     }
   };

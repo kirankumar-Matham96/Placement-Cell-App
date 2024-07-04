@@ -1,5 +1,12 @@
 /* API related functions */
-// done
+const BASE_URL = "http://localhost:3000";
+
+/**
+ * To set cookies (to store token in cookies)
+ * @param {cookie name} name
+ * @param {cookie value} value
+ * @param {expiry days} expDays
+ */
 const setCookie = (name, value, expDays) => {
   const date = new Date();
   date.setTime(date.getTime() + expDays * 24 * 60 * 60 * 1000);
@@ -7,7 +14,11 @@ const setCookie = (name, value, expDays) => {
   document.cookie = `${name}=${value};${expires};path=/`;
 };
 
-// done
+/**
+ * To get cookie
+ * @param {cookie name} cookieName
+ * @returns String (token)
+ */
 const getCookie = (cookieName) => {
   const name = `${cookieName}=`;
   const decodedCookie = decodeURIComponent(document.cookie);
@@ -24,7 +35,10 @@ const getCookie = (cookieName) => {
   return "";
 };
 
-// done
+/**
+ * To delete cookie
+ * @param {cookie name} name
+ */
 const deleteCookie = (name) => {
   const date = new Date();
   date.setTime(date.getTime() - 24 * 60 * 60 * 1000);
@@ -32,14 +46,17 @@ const deleteCookie = (name) => {
   document.cookie = `${name}=;${expires};path=/`;
 };
 
-// done
+/**
+ * To signup user
+ * @param {DOM event} event
+ * @returns Boolean
+ */
 const signUp = async (event) => {
   try {
     const password = event.target.password.value;
     const confirmPassword = event.target["confirm-password"].value;
 
     if (password != confirmPassword) {
-      console.log("error: password and confirm password doesn't match!");
       alert("error: password and confirm password doesn't match!");
       return;
     }
@@ -58,7 +75,7 @@ const signUp = async (event) => {
       body: JSON.stringify(data),
     };
     const response = await fetch(
-      "http://localhost:3000/api/placement-cell/users/signup",
+      `${BASE_URL}/api/placement-cell/users/signup`,
       options
     );
 
@@ -73,7 +90,11 @@ const signUp = async (event) => {
   }
 };
 
-// done
+/**
+ * To signin user
+ * @param {DOM event} event
+ * @returns Boolean
+ */
 const signIn = async (event) => {
   try {
     const email = event.target.email.value;
@@ -90,7 +111,7 @@ const signIn = async (event) => {
       body: JSON.stringify(data),
     };
     const response = await fetch(
-      "http://localhost:3000/api/placement-cell/users/signin",
+      `${BASE_URL}/api/placement-cell/users/signin`,
       options
     );
     const readable = await response.json();
@@ -110,7 +131,9 @@ const signIn = async (event) => {
   }
 };
 
-// done
+/**
+ * To signout user
+ */
 const signOut = async () => {
   try {
     deleteCookie("token");
@@ -121,7 +144,7 @@ const signOut = async () => {
       },
     };
     const response = await fetch(
-      "http://localhost:3000/api/placement-cell/users/signout",
+      `${BASE_URL}/api/placement-cell/users/signout`,
       options
     );
     alert("user logged out successfully!");
@@ -130,7 +153,11 @@ const signOut = async () => {
   }
 };
 
-// done
+/**
+ * To add student
+ * @param {DOM event} event
+ * @returns Boolean
+ */
 const addStudent = async (event) => {
   try {
     const studentData = {
@@ -154,7 +181,7 @@ const addStudent = async (event) => {
       body: JSON.stringify(studentData),
     };
     const response = await fetch(
-      "http://localhost:3000/api/placement-cell/students/add",
+      `${BASE_URL}/api/placement-cell/students/add`,
       options
     );
 
@@ -169,7 +196,10 @@ const addStudent = async (event) => {
   }
 };
 
-// done
+/**
+ * To get all the students
+ * @returns Object - Array
+ */
 const getStudents = async () => {
   try {
     const options = {
@@ -179,7 +209,7 @@ const getStudents = async () => {
       },
     };
     const response = await fetch(
-      "http://localhost:3000/api/placement-cell/students/",
+      `${BASE_URL}/api/placement-cell/students/`,
       options
     );
     const data = await response.json();
@@ -190,7 +220,10 @@ const getStudents = async () => {
   }
 };
 
-// done
+/**
+ * To get all companies
+ * @returns Object - Array
+ */
 const getCompanies = async () => {
   try {
     const options = {
@@ -200,7 +233,7 @@ const getCompanies = async () => {
       },
     };
     const response = await fetch(
-      "http://localhost:3000/api/placement-cell/companies/",
+      `${BASE_URL}/api/placement-cell/companies/`,
       options
     );
     const data = await response.json();
@@ -211,6 +244,11 @@ const getCompanies = async () => {
   }
 };
 
+/**
+ * To get company by id
+ * @param {company id} companyId
+ * @returns Object
+ */
 const getCompany = async (companyId) => {
   try {
     const options = {
@@ -220,18 +258,20 @@ const getCompany = async (companyId) => {
       },
     };
     const response = await fetch(
-      `http://localhost:3000/api/placement-cell/companies/${companyId}`,
+      `${BASE_URL}/api/placement-cell/companies/${companyId}`,
       options
     );
     const data = await response.json();
-    // console.log("company => ", data);
     return data.success ? data.company : null;
   } catch (error) {
     console.error("Error fetching data:", error);
   }
 };
 
-// done
+/**
+ * To get all interviews
+ * @returns Object - Array
+ */
 const getInterviews = async () => {
   try {
     const options = {
@@ -241,11 +281,10 @@ const getInterviews = async () => {
       },
     };
     const response = await fetch(
-      "http://localhost:3000/api/placement-cell/interviews/",
+      `${BASE_URL}/api/placement-cell/interviews/`,
       options
     );
     const data = await response.json();
-    console.log("interviews => ", { data });
 
     return data.success ? data.interview : null;
   } catch (error) {
@@ -253,10 +292,12 @@ const getInterviews = async () => {
   }
 };
 
-// done
+/**
+ * To add interview
+ * @param {DOM event} event
+ */
 const scheduleInterview = async (event) => {
   try {
-    console.log(event.target);
     const company = await getCompany(event.target["company-options"].value);
     const lastDate = company.interviews.find(
       (interview) =>
@@ -277,7 +318,7 @@ const scheduleInterview = async (event) => {
       body: JSON.stringify(studentData),
     };
     const response = await fetch(
-      "http://localhost:3000/api/placement-cell/interviews/add",
+      `${BASE_URL}/api/placement-cell/interviews/add`,
       options
     );
     if (response.ok) {
@@ -289,7 +330,10 @@ const scheduleInterview = async (event) => {
   }
 };
 
-// done
+/**
+ * To allocate student to an interview
+ * @param {DOM event} event
+ */
 const allocateStudentToAnInterview = async (event) => {
   try {
     const interviewId =
@@ -310,7 +354,7 @@ const allocateStudentToAnInterview = async (event) => {
     };
 
     const response = await fetch(
-      `http://localhost:3000/api/placement-cell/interviews/${interviewId}`,
+      `${BASE_URL}/api/placement-cell/interviews/${interviewId}`,
       options
     );
 
@@ -323,6 +367,11 @@ const allocateStudentToAnInterview = async (event) => {
   }
 };
 
+/**
+ * To update interview result
+ * @param {date Object} data
+ * @returns Boolean
+ */
 const updateStudentInterviewStatus = async (data) => {
   try {
     const options = {
@@ -335,7 +384,7 @@ const updateStudentInterviewStatus = async (data) => {
     };
 
     const response = await fetch(
-      `http://localhost:3000/api/placement-cell/results/`,
+      `${BASE_URL}/api/placement-cell/results/`,
       options
     );
 
@@ -349,13 +398,17 @@ const updateStudentInterviewStatus = async (data) => {
   }
 };
 
-// done
+/**
+ * To get jobs data from an API
+ * @returns Object - Array
+ */
 const getCompaniesListFromOutside = () => {
   try {
     /*
       NOTE: The provided link for jobs is not working.
       Also did not find any API without signin.
-      Hence using local data.
+      Hence using local data. Feel free to replace
+      companies array with any API.
     */
     const companies = [
       {
@@ -541,7 +594,10 @@ const getCompaniesListFromOutside = () => {
   }
 };
 
-// done (server side error - schema issue*)
+/**
+ * Add company to inventory(DB)
+ * @param {DOM event} event 
+ */
 const addCompany = async (event) => {
   try {
     const company = JSON.parse(event.target.getAttribute("data-company"));
@@ -564,7 +620,7 @@ const addCompany = async (event) => {
     };
 
     const response = await fetch(
-      `http://localhost:3000/api/placement-cell/companies/add`,
+      `${BASE_URL}/api/placement-cell/companies/add`,
       options
     );
 
@@ -578,7 +634,9 @@ const addCompany = async (event) => {
 
 /* DOM related functions */
 
-// done
+/**
+ * To display login form and hide other forms and containers
+ */
 function showLoginForm() {
   if (!loginBtnEl.classList.contains("d-none")) {
     loginBtnEl.classList.add("d-none");
@@ -597,7 +655,9 @@ function showLoginForm() {
   }
 }
 
-// done
+/**
+ * To display Home page and hide other forms and containers
+ */
 function showHomePage() {
   if (!userAuth()) {
     // show both register and login btns
@@ -634,7 +694,9 @@ function showHomePage() {
   }
 }
 
-// done
+/**
+ * To confirm user auth
+ */
 function userAuth() {
   const isTokenExists = getCookie("token");
   if (!isTokenExists) {
@@ -645,6 +707,9 @@ function userAuth() {
   return true;
 }
 
+/**
+ * To show or hide elements on logged in
+ */
 function loggedIn() {
   // hide login btn
   if (!loginBtnEl.classList.contains("d-none")) {
@@ -660,6 +725,9 @@ function loggedIn() {
   }
 }
 
+/**
+ * To show or hide elements on logged out
+ */
 function loggedOut() {
   // show login btn
   if (loginBtnEl.classList.contains("d-none")) {
@@ -675,7 +743,10 @@ function loggedOut() {
   }
 }
 
-// done
+/**
+ * To create students list items
+ * @param {Students Array} students 
+ */
 function createStudents(students) {
   studentsListsContainerEl.innerHTML = "";
   students.forEach((student) => {
@@ -750,7 +821,11 @@ function createStudents(students) {
   });
 }
 
-// done
+/**
+ * To set date format
+ * @param {date String} dateStr 
+ * @returns formatted date String
+ */
 function setDateFormat(dateStr) {
   try {
     const dateObj = new Date(dateStr);
@@ -778,7 +853,10 @@ function setDateFormat(dateStr) {
   }
 }
 
-// done--
+/**
+ * To create job list items
+ * @param {Companies Array} companies 
+ */
 function createJobsList(companies) {
   jobsListContainerEl.innerHTML = "";
   companies.forEach((company) => {
@@ -807,9 +885,12 @@ function createJobsList(companies) {
   });
 }
 
-// done
+/**
+ * To create and populate options for select tag
+ * @param {select tag container to be populated with options} optionsContainerEl 
+ * @param {options Array} list 
+ */
 function createOptions(optionsContainerEl, list) {
-  console.log(list);
   optionsContainerEl.innerHTML = "<option selected>Choose...</option>";
   list.map((item) => {
     const optionEl = document.createElement("option");
@@ -834,6 +915,9 @@ function createOptions(optionsContainerEl, list) {
   });
 }
 
+/**
+ * To download the student data in CSV format
+ */
 async function downloadDataCSV() {
   try {
     const options = {
@@ -844,7 +928,7 @@ async function downloadDataCSV() {
     };
 
     const response = await fetch(
-      "http://localhost:3000/api/placement-cell/students/download",
+      `${BASE_URL}/api/placement-cell/students/download`,
       options
     );
 
@@ -877,6 +961,10 @@ async function downloadDataCSV() {
   }
 }
 
+/**
+ * To update result of an interview of a student
+ * @param {DOM event} event 
+ */
 async function studentResultChange(event) {
   const data = {
     studentId: event.target.parentElement.parentElement.getAttribute("id"),
@@ -899,10 +987,13 @@ async function studentResultChange(event) {
   }
 }
 
+/**
+ * To create interview list items
+ * @param {interviews Array} interviews 
+ */
 async function createInterviewList(interviews) {
   interviewsListContainerEl.innerHTML = "";
   interviews.forEach((interview) => {
-    console.log({ interview });
     const accordionItemEl = document.createElement("div");
     accordionItemEl.classList.add("accordion-item");
     accordionItemEl.innerHTML = `
@@ -934,7 +1025,6 @@ async function createInterviewList(interviews) {
         <h5>Students Allotted:</h5>
       ${interview.students
         .map((student) => {
-          console.log({ student });
           return `
           <div id="${student._id}">
             <div>
@@ -982,6 +1072,10 @@ async function createInterviewList(interviews) {
   });
 }
 
+/**
+ * To set min and max values for date input
+ * @param {last date of an interview} lastDate
+ */
 function setMinMaxDatesForInterviewSchedule(lastDate = "") {
   // setting min date for interview allocation
   interviewDateEl.min = new Date().toISOString().slice(0, -8);
@@ -1142,23 +1236,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   companyOptionsEl.addEventListener("change", async (event) => {
     const companyId = event.target.value;
-    // trigger designation/position options creation here
-
-    // get interviews from the company
-    // const interviews = await getInterviews();
     const company = await getCompany(companyId);
 
-    // get item with company id
-    // const selectedCompanyInterviews = interviews.filter((interview) => {
-    //   console.log({ interview });
-
-    //   if (interview.companyId._id === companyId) {
-    //     return interview.position;
-    //   }
-    // });
-
     const designations = company.interviews.map((interview) => {
-      console.log({ interview });
       if (new Date(interview.lastDate) > new Date()) {
         return {
           position: interview.designation,
@@ -1168,7 +1248,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    console.log({ designations });
     // create options list
     createOptions(positionOptionsEl, designations);
   });
@@ -1202,7 +1281,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const companiesList = interviews
         .filter((item) => new Date(item.date) >= new Date())
         .map((item) => {
-          console.log({ item });
           return {
             name: `${item.companyId.name} - ${item.position}`,
             _id: item.companyId._id,

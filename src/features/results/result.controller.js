@@ -80,7 +80,6 @@ export class ResultController {
       const result = await ResultRepository.update2(req.body);
 
       if (req.body.result) {
-        console.log("updating student repo in result controller");
         // update student status
         await StudentRepository.update(result.studentId, {
           status: result.result === "PASS" ? "placed" : "not_placed",

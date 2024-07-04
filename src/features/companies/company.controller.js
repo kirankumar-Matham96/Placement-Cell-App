@@ -22,7 +22,6 @@ export class CompanyController {
         company,
       });
     } catch (error) {
-      console.log("in company controller => ", error, "\n\n\n\n");
       next(error);
     }
   };

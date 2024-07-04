@@ -97,7 +97,6 @@ export class CompanyRepository {
 
       return response;
     } catch (error) {
-      console.log("Error at company repo update => ", { error });
       throw error;
     }
   };

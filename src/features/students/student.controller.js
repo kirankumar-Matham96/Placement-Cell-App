@@ -9,7 +9,6 @@ import { downloadCSVMiddleware } from "../../middlewares/downloadHandler.middlew
 class StudentController {
   addStudent = async (req, res, next) => {
     try {
-      console.log(req.body);
       const student = await StudentRepository.add(req.body);
       res.status(201).json({ success: true, student });
     } catch (error) {
