@@ -37,25 +37,25 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(path.resolve(), "dist")));
 
-// app.use((req, res, next) => {
-//   res.set(
-//     "Access-Control-Allow-Origin",
-//     "https://placement-cell-app-9q7u.onrender.com/"
-//   ); // Replace with your frontend domain
-//   res.set("Access-Control-Allow-Credentials", "true");
-//   res.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-//   res.set(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
+app.use((req, res, next) => {
+  res.set(
+    "Access-Control-Allow-Origin",
+    "https://placement-cell-app-9q7u.onrender.com/"
+  ); // Replace with your frontend domain
+  res.set("Access-Control-Allow-Credentials", "true");
+  res.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.set(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
 
-//   // Handle preflight requests
-//   if (req.method === "OPTIONS") {
-//     return res.sendStatus(200);
-//   }
+  // Handle preflight requests
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
 
-//   next();
-// });
+  next();
+});
 
 const getUI = (req, res, next) => {
   try {
