@@ -59,10 +59,12 @@ app.use("/api/placement-cell/results", auth, resultRoutes);
 app.get("/", (req, res, next) => {
   res.status(200).send({ message: "Welcome to Placement Cell" });
 });
-app.use("/*", unknownPathHandlerMiddleware);
 
 // app level error handling middleware
 app.use(errorHandlingMiddleware);
+
+// 404 path request handler
+app.use(unknownPathHandlerMiddleware);
 
 // listening to portal
 app.listen(PORT, () => {
