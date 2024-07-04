@@ -1,5 +1,9 @@
 /* API related functions */
-const BASE_URL = "http://localhost:3000";
+/* for local */
+let baseUrl = "http://localhost:3000";
+
+/* uncomment below line for live API */
+// baseUrl = "https://placement-cell-app-t6rs.onrender.com";
 
 /**
  * To set cookies (to store token in cookies)
@@ -75,7 +79,7 @@ const signUp = async (event) => {
       body: JSON.stringify(data),
     };
     const response = await fetch(
-      `${BASE_URL}/api/placement-cell/users/signup`,
+      `${baseUrl}/api/placement-cell/users/signup`,
       options
     );
 
@@ -111,7 +115,7 @@ const signIn = async (event) => {
       body: JSON.stringify(data),
     };
     const response = await fetch(
-      `${BASE_URL}/api/placement-cell/users/signin`,
+      `${baseUrl}/api/placement-cell/users/signin`,
       options
     );
     const readable = await response.json();
@@ -144,7 +148,7 @@ const signOut = async () => {
       },
     };
     const response = await fetch(
-      `${BASE_URL}/api/placement-cell/users/signout`,
+      `${baseUrl}/api/placement-cell/users/signout`,
       options
     );
     alert("user logged out successfully!");
@@ -181,7 +185,7 @@ const addStudent = async (event) => {
       body: JSON.stringify(studentData),
     };
     const response = await fetch(
-      `${BASE_URL}/api/placement-cell/students/add`,
+      `${baseUrl}/api/placement-cell/students/add`,
       options
     );
 
@@ -209,7 +213,7 @@ const getStudents = async () => {
       },
     };
     const response = await fetch(
-      `${BASE_URL}/api/placement-cell/students/`,
+      `${baseUrl}/api/placement-cell/students/`,
       options
     );
     const data = await response.json();
@@ -233,7 +237,7 @@ const getCompanies = async () => {
       },
     };
     const response = await fetch(
-      `${BASE_URL}/api/placement-cell/companies/`,
+      `${baseUrl}/api/placement-cell/companies/`,
       options
     );
     const data = await response.json();
@@ -258,7 +262,7 @@ const getCompany = async (companyId) => {
       },
     };
     const response = await fetch(
-      `${BASE_URL}/api/placement-cell/companies/${companyId}`,
+      `${baseUrl}/api/placement-cell/companies/${companyId}`,
       options
     );
     const data = await response.json();
@@ -281,7 +285,7 @@ const getInterviews = async () => {
       },
     };
     const response = await fetch(
-      `${BASE_URL}/api/placement-cell/interviews/`,
+      `${baseUrl}/api/placement-cell/interviews/`,
       options
     );
     const data = await response.json();
@@ -318,7 +322,7 @@ const scheduleInterview = async (event) => {
       body: JSON.stringify(studentData),
     };
     const response = await fetch(
-      `${BASE_URL}/api/placement-cell/interviews/add`,
+      `${baseUrl}/api/placement-cell/interviews/add`,
       options
     );
     if (response.ok) {
@@ -354,7 +358,7 @@ const allocateStudentToAnInterview = async (event) => {
     };
 
     const response = await fetch(
-      `${BASE_URL}/api/placement-cell/interviews/${interviewId}`,
+      `${baseUrl}/api/placement-cell/interviews/${interviewId}`,
       options
     );
 
@@ -384,7 +388,7 @@ const updateStudentInterviewStatus = async (data) => {
     };
 
     const response = await fetch(
-      `${BASE_URL}/api/placement-cell/results/`,
+      `${baseUrl}/api/placement-cell/results/`,
       options
     );
 
@@ -596,7 +600,7 @@ const getCompaniesListFromOutside = () => {
 
 /**
  * Add company to inventory(DB)
- * @param {DOM event} event 
+ * @param {DOM event} event
  */
 const addCompany = async (event) => {
   try {
@@ -620,7 +624,7 @@ const addCompany = async (event) => {
     };
 
     const response = await fetch(
-      `${BASE_URL}/api/placement-cell/companies/add`,
+      `${baseUrl}/api/placement-cell/companies/add`,
       options
     );
 
@@ -745,7 +749,7 @@ function loggedOut() {
 
 /**
  * To create students list items
- * @param {Students Array} students 
+ * @param {Students Array} students
  */
 function createStudents(students) {
   studentsListsContainerEl.innerHTML = "";
@@ -823,7 +827,7 @@ function createStudents(students) {
 
 /**
  * To set date format
- * @param {date String} dateStr 
+ * @param {date String} dateStr
  * @returns formatted date String
  */
 function setDateFormat(dateStr) {
@@ -855,7 +859,7 @@ function setDateFormat(dateStr) {
 
 /**
  * To create job list items
- * @param {Companies Array} companies 
+ * @param {Companies Array} companies
  */
 function createJobsList(companies) {
   jobsListContainerEl.innerHTML = "";
@@ -887,8 +891,8 @@ function createJobsList(companies) {
 
 /**
  * To create and populate options for select tag
- * @param {select tag container to be populated with options} optionsContainerEl 
- * @param {options Array} list 
+ * @param {select tag container to be populated with options} optionsContainerEl
+ * @param {options Array} list
  */
 function createOptions(optionsContainerEl, list) {
   optionsContainerEl.innerHTML = "<option selected>Choose...</option>";
@@ -928,7 +932,7 @@ async function downloadDataCSV() {
     };
 
     const response = await fetch(
-      `${BASE_URL}/api/placement-cell/students/download`,
+      `${baseUrl}/api/placement-cell/students/download`,
       options
     );
 
@@ -963,7 +967,7 @@ async function downloadDataCSV() {
 
 /**
  * To update result of an interview of a student
- * @param {DOM event} event 
+ * @param {DOM event} event
  */
 async function studentResultChange(event) {
   const data = {
@@ -989,7 +993,7 @@ async function studentResultChange(event) {
 
 /**
  * To create interview list items
- * @param {interviews Array} interviews 
+ * @param {interviews Array} interviews
  */
 async function createInterviewList(interviews) {
   interviewsListContainerEl.innerHTML = "";
