@@ -37,11 +37,21 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(path.resolve(), "dist")));
 
+const allowedOrigins = [
+  "http://127.0.0.1:5500",
+  "https://placement-cell-app-9q7u.onrender.com",
+  // Add more allowed origins here
+];
+
 app.use((req, res, next) => {
-  res.set("Access-Control-Allow-Origin", [
-    "https://placement-cell-app-9q7u.onrender.com",
-    "http://127.0.0.1:5500",
-  ]); // Replace with your frontend domain
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  } else {
+    res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500"); // default origin
+  }
+
   res.set("Access-Control-Allow-Credentials", "true");
   res.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.set(
