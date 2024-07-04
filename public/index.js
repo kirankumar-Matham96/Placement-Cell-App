@@ -1,6 +1,6 @@
 /* API related functions */
 /* for local */
-// let baseUrl = "http://localhost:3000";
+let baseUrl = "http://localhost:3000";
 
 /* uncomment below line for live API or just comment below line */
 baseUrl = "https://placement-cell-app-9q7u.onrender.com/";
