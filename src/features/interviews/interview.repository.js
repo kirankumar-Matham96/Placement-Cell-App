@@ -6,7 +6,6 @@ import { InterviewModel } from "./interview.schema.js";
 import { ApplicationError } from "../../middlewares/errorHandling.Middleware.js";
 
 export class InterviewRepository {
-  // Add a new interview
   static add = async (data) => {
     try {
       const interview = new InterviewModel(data);
@@ -16,14 +15,13 @@ export class InterviewRepository {
     }
   };
 
-  // Get an interview by ID
   static get = async (interviewId) => {
     try {
       const response = await InterviewModel.findById(interviewId)
         .populate("Companies")
         .populate("Students");
       if (!response) {
-        throw new ApplicationError("Interview not found", 404);
+        throw new ApplicationError("interview not found", 404);
       }
       return response;
     } catch (error) {
@@ -31,7 +29,6 @@ export class InterviewRepository {
     }
   };
 
-  // Get all interviews
   static getAll = async () => {
     try {
       return await InterviewModel.find()
@@ -42,24 +39,25 @@ export class InterviewRepository {
     }
   };
 
-  // Update an interview
   static update = async (interviewId, data) => {
     try {
       const interview = await InterviewModel.findById(interviewId);
       if (!interview) {
-        throw new ApplicationError("Interview not found", 404);
+        throw new ApplicationError("interview not found", 404);
       }
 
-      // Update fields if provided
       if (data.companyId) {
         interview.companyId = data.companyId;
       }
+
       if (data.date) {
         interview.date = data.date;
       }
+
       if (data.position) {
         interview.position = data.position;
       }
+
       if (data.studentId) {
         const student = interview.students.find(
           (student) => student.toString() === data.studentId
@@ -73,7 +71,7 @@ export class InterviewRepository {
 
       const response = await interview.save();
       if (!response) {
-        throw new ApplicationError("Interview not found", 404);
+        throw new ApplicationError("interview not found", 404);
       }
       return response;
     } catch (error) {
@@ -81,12 +79,11 @@ export class InterviewRepository {
     }
   };
 
-  // Delete an interview
   static delete = async (interviewId) => {
     try {
       const response = await InterviewModel.findByIdAndDelete(interviewId);
       if (!response) {
-        throw new ApplicationError("Interview not found", 404);
+        throw new ApplicationError("interview not found", 404);
       }
       return response;
     } catch (error) {

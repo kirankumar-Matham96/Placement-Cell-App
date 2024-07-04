@@ -1336,8 +1336,30 @@ async function downloadDataCSV() {
       options
     );
 
-    const data = await response.json();
-    console.log({ data });
+    const { data } = await response.json();
+
+    // Decode the base64-encoded CSV
+    const csv = atob(data.csv);
+
+    // Create a Blob from the CSV string
+    const blob = new Blob([csv], { type: "text/csv" });
+
+    // Create a URL for the Blob
+    const url = URL.createObjectURL(blob);
+
+    // Create a link element
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "chrome-extension-output.csv";
+
+    // Append the link to the document
+    document.body.appendChild(a);
+
+    // Trigger the download by simulating a click
+    a.click();
+
+    // Remove the link from the document
+    document.body.removeChild(a);
   } catch (error) {
     console.error("Error fetching data:", error);
   }

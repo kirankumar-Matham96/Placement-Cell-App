@@ -4,9 +4,9 @@ import { CompanyRepository } from "../companies/company.repository.js";
 import { downloadCSVMiddleware } from "../../middlewares/downloadHandler.middleware.js";
 
 class StudentController {
-  // Add a new student
   addStudent = async (req, res, next) => {
     try {
+      console.log(req.body);
       const student = await StudentRepository.add(req.body);
       res.status(201).json({ success: true, student });
     } catch (error) {
@@ -14,7 +14,6 @@ class StudentController {
     }
   };
 
-  // Get all students
   getAllStudents = async (req, res, next) => {
     try {
       const students = await StudentRepository.getAll();
@@ -24,7 +23,6 @@ class StudentController {
     }
   };
 
-  // Get a student by ID
   getStudentById = async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -35,7 +33,6 @@ class StudentController {
     }
   };
 
-  // Update a student by ID
   updateStudentById = async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -46,7 +43,6 @@ class StudentController {
     }
   };
 
-  // Delete a student by ID
   deleteStudentById = async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -57,27 +53,24 @@ class StudentController {
     }
   };
 
-  // Download student data in CSV format
   downloadDataInCSVFormat = async (req, res, next) => {
     try {
-      // Get all students and companies
-      const students = await StudentRepository.getAll();
+      // Get data
+      const data = await StudentRepository.getAll();
       const companies = await CompanyRepository.getAll();
 
-      // Prepare an array to store modified data
-      const modifiedData = [];
-
-      // Process each student's interview data
-      students.forEach((student) => {
+      // Map through each student
+      const modifiedData = data.map((student) => {
+        // Map through each interview of the student
         const interviewDetails = student.interviews
           .map((interview) => {
-            // Find the company details for the interview
+            // Find the company for the current interview
             const company = companies.find(
               (companyItem) =>
                 companyItem._id.toString() === interview.companyId.toString()
             );
 
-            // Find the result details for the interview
+            // Find the result for the current interview
             const result = student.results.find(
               (result) =>
                 result.studentId.toString() === student._id.toString() &&
@@ -86,11 +79,11 @@ class StudentController {
                 result.interviewId.toString() === interview._id.toString()
             );
 
-            // Return formatted interview details with company name and result
+            // Return the interview details with company name and result
             if (company && result) {
               return {
                 interviewDate: interview.date,
-                interviewCompanyName: company.name,
+                interviewCompany: company.name,
                 interviewResult: result.result,
               };
             } else {
@@ -99,39 +92,30 @@ class StudentController {
           })
           .filter((detail) => detail !== null); // Filter out any null values
 
-        // Map interview details to a suitable format for CSV
-        const arrOfObjects = interviewDetails.map((item) => ({
-          studentId: student._id.toString(),
-          studentName: student.name,
-          studentCollege: student.college,
-          studentStatus: student.status,
-          DSA: student.scores.DSA,
-          WebDev: student.scores.WebDev,
-          React: student.scores.React,
-          interviewCompanyName: item.interviewCompanyName,
-          interviewDate: item.interviewDate,
-          interviewResult: item.interviewResult,
-        }));
+        const arrOfObjects = interviewDetails.map((item) => {
+          return {
+            studentId: student._id.toString(),
+            studentName: student.name,
+            studentCollege: student.college,
+            studentStatus: student.status,
+            DSA: student.scores.DSA,
+            WebDev: student.scores.WebDev,
+            React: student.scores.React,
+            interviewCompanyName: item.interviewCompany,
+            interviewDate: item.interviewDate,
+            interviewResult: item.interviewResult,
+          };
+        });
 
-        // Add formatted data to modifiedData array
-        modifiedData.push(...arrOfObjects);
+        // Return the modified student data with interview details
+        return arrOfObjects;
       });
 
-      // Log the first modified data item for reference
-      if (modifiedData.length > 0) {
-        console.log("modifiedData => ", modifiedData[0]);
-      }
+      // converting to string
+      const strData = JSON.stringify(modifiedData.flat());
 
-      // Convert modifiedData to JSON string
-      const strData = JSON.stringify(modifiedData);
-
-      // Call downloadCSVMiddleware to initiate CSV download
-      downloadCSVMiddleware(strData);
-
-      // Send success response
-      res
-        .status(200)
-        .json({ success: true, message: "Data downloaded successfully." });
+      downloadCSVMiddleware(strData, res, next);
+      // res.status(200).json({ success: true, message: "data downloaded..." });
     } catch (error) {
       next(error);
     }

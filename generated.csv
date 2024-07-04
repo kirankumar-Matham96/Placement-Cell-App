@@ -1,0 +1,4 @@
+﻿"studentId","studentName","studentCollege","studentStatus","DSA","WebDev","React","interviewCompanyName","interviewDate","interviewResult"
+"668659571e50a95f15b2720e","Vihar","Jeevanjyothi institute of technology","not_placed",50,60,80,"Microsoft","2024-07-26T08:12:00.000Z","PASS"
+"668659571e50a95f15b2720e","Vihar","Jeevanjyothi institute of technology","not_placed",50,60,80,"Google","2024-07-23T08:13:00.000Z","FAIL"
+"66865ac91e50a95f15b272ab","Manish","VJR institute of technology","not_placed",80,60,60,"Microsoft","2024-07-26T08:12:00.000Z","On Hold"

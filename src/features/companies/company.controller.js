@@ -1,24 +1,27 @@
 import { CompanyRepository } from "./company.repository.js";
 
 export class CompanyController {
-  // Add a new company
   addCompany = async (req, res, next) => {
     try {
-      // Adjust date from request
+      console.log(
+        "body in companies controller add function => ",
+        req.body,
+        "\n\n\n"
+      );
+      // adjust date from request
       req.body.interview = [req.body.interview];
       const company = await CompanyRepository.add(req.body);
       res.status(201).json({
         success: true,
-        message: "Company added successfully",
+        message: "company added successfully",
         company,
       });
     } catch (error) {
-      console.log("Error in adding company:", error);
+      console.log("in company controller => ", error, "\n\n\n\n");
       next(error);
     }
   };
 
-  // Get a company by ID
   getCompany = async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -32,27 +35,25 @@ export class CompanyController {
     }
   };
 
-  // Get all companies
   getCompanies = async (req, res, next) => {
     try {
       const companies = await CompanyRepository.getAll();
       res.status(200).json({
         success: true,
-        companies,
+        company: companies,
       });
     } catch (error) {
       next(error);
     }
   };
 
-  // Update a company by ID
   updateCompany = async (req, res, next) => {
     try {
       const { id } = req.params;
       const company = await CompanyRepository.update(id, req.body);
       res.status(200).json({
         success: true,
-        message: "Company updated successfully",
+        message: "company updated successfully",
         company,
       });
     } catch (error) {
@@ -60,14 +61,13 @@ export class CompanyController {
     }
   };
 
-  // Delete a company by ID
   deleteCompany = async (req, res, next) => {
     try {
       const { id } = req.params;
       await CompanyRepository.delete(id);
       res.status(200).json({
         success: true,
-        message: "Company deleted successfully",
+        message: "company deleted successfully",
       });
     } catch (error) {
       next(error);

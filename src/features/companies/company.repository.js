@@ -1,9 +1,10 @@
+// package imports
 import mongoose from "mongoose";
+// module imports
 import { CompanyModel } from "./company.schema.js";
 import { ApplicationError } from "../../middlewares/errorHandling.Middleware.js";
 
 export class CompanyRepository {
-  // Add a new company
   static add = async (data) => {
     try {
       return await CompanyModel(data).save();
@@ -12,35 +13,25 @@ export class CompanyRepository {
     }
   };
 
-  // Get a company by ID
   static get = async (companyId) => {
     try {
-      const response = await CompanyModel.findById(companyId)
-        .populate("interviews")
-        .populate({
-          path: "students.studentId",
-          model: "Students",
-        })
-        .populate({
-          path: "students.interviewId",
-          model: "Interviews",
-        });
-
+      const response = await CompanyModel.findById(companyId);
+      // .populate("Interviews")
+      // .populate("Students");
       if (!response) {
-        throw new ApplicationError("Company not found", 404);
+        throw new ApplicationError("company not found", 404);
       }
-
       return response;
     } catch (error) {
       throw error;
     }
   };
 
-  // Get all companies with populated interviews and students
   static getAll = async () => {
     try {
       return await CompanyModel.find()
         .populate("interviews")
+        // .populate("students");
         .populate({
           path: "students.studentId",
           model: "Students",
@@ -54,9 +45,9 @@ export class CompanyRepository {
     }
   };
 
-  // Update a company by ID
   static update = async (companyId, data) => {
     try {
+      // Fetch the company by ID
       const company = await CompanyModel.findById(companyId);
       if (!company) {
         throw new ApplicationError("Company not found", 404);
@@ -85,6 +76,7 @@ export class CompanyRepository {
 
       return response;
     } catch (error) {
+      console.log("Error at company repo update => ", { error });
       throw error;
     }
   };
@@ -151,12 +143,11 @@ export class CompanyRepository {
     }
   };
 
-  // Delete a company by ID
   static delete = async (companyId) => {
     try {
       const response = await CompanyModel.findByIdAndDelete(companyId);
       if (!response) {
-        throw new ApplicationError("Company not found", 404);
+        throw new ApplicationError("company not found", 404);
       }
       return response;
     } catch (error) {
