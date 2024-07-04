@@ -3,6 +3,7 @@ import express from "express";
 import "dotenv/config";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import path from "path";
 
 // module imports
 import { connectToDB } from "./src/config/db.config.js";
@@ -34,6 +35,8 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(express.static(path.join(path.resolve(), "dist")));
+
 app.use((req, res, next) => {
   res.set("Access-Control-Allow-Origin", "http://127.0.0.1:5500"); // Replace with your frontend domain
   res.set("Access-Control-Allow-Credentials", "true");
@@ -53,9 +56,11 @@ app.use((req, res, next) => {
 
 const getUI = (req, res, next) => {
   try {
-    res.status(200).send("./public/index.html");
+    const filePath = path.join(path.resolve(), "dist", "combined.html");
+    res.status(200).sendFile(filePath);
   } catch (error) {
     console.log(error);
+    next(error);
   }
 };
 
