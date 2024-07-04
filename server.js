@@ -13,6 +13,7 @@ import interviewRoutes from "./src/features/interviews/interview.routes.js";
 import resultRoutes from "./src/features/results/result.routes.js";
 import { errorHandlingMiddleware } from "./src/middlewares/errorHandling.Middleware.js";
 import { auth } from "./src/middlewares/auth.middleware.js";
+import { unknownPathHandlerMiddleware } from "./src/middlewares/unknownPathHandler.middleware.js";
 
 // constants
 const PORT = process.env.PORT;
@@ -55,6 +56,7 @@ app.use("/api/placement-cell/students", auth, studentRoutes);
 app.use("/api/placement-cell/companies", auth, companyRoutes);
 app.use("/api/placement-cell/interviews", auth, interviewRoutes);
 app.use("/api/placement-cell/results", auth, resultRoutes);
+app.use("*", unknownPathHandlerMiddleware);
 
 // app level error handling middleware
 app.use(errorHandlingMiddleware);
