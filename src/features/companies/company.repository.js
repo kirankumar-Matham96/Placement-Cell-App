@@ -4,7 +4,15 @@ import mongoose from "mongoose";
 import { CompanyModel } from "./company.schema.js";
 import { ApplicationError } from "../../middlewares/errorHandling.Middleware.js";
 
+/**
+ * Repository class to handle the Company related db operations
+ */
 export class CompanyRepository {
+   /**
+    * To save the company to the db
+    * @param {data from the client} data 
+    * @returns Object
+    */
   static add = async (data) => {
     try {
       return await CompanyModel(data).save();
@@ -13,11 +21,14 @@ export class CompanyRepository {
     }
   };
 
+  /**
+    * To get the company by id from the db
+    * @param {company id from the client} companyId 
+    * @returns Object
+    */
   static get = async (companyId) => {
     try {
       const response = await CompanyModel.findById(companyId);
-      // .populate("Interviews")
-      // .populate("Students");
       if (!response) {
         throw new ApplicationError("company not found", 404);
       }
@@ -27,6 +38,10 @@ export class CompanyRepository {
     }
   };
 
+  /**
+   * To get all the companies from the db
+   * @returns Object
+   */
   static getAll = async () => {
     try {
       return await CompanyModel.find()
@@ -45,6 +60,12 @@ export class CompanyRepository {
     }
   };
 
+  /**
+   * To update a company by id in the db
+   * @param {company id to be updated} companyId 
+   * @param {new company data} data 
+   * @returns Object
+   */
   static update = async (companyId, data) => {
     try {
       // Fetch the company by ID
@@ -81,7 +102,11 @@ export class CompanyRepository {
     }
   };
 
-  // Helper function to handle student updates
+  /**
+   * Helper function to handle student updates
+   * @param {company object from db} company 
+   * @param {new data from client} data 
+   */
   static handleStudentUpdates = async (company, data) => {
     if (data.studentId instanceof mongoose.Types.ObjectId) {
       data.studentId = data.studentId.toString();
@@ -126,7 +151,11 @@ export class CompanyRepository {
     }
   };
 
-  // Helper function to handle interview updates
+  /**
+   * Helper function to handle interview updates
+   * @param {company object from the db} company 
+   * @param {new interview data from client} interviewData 
+   */
   static handleInterviewUpdates = (company, interviewData) => {
     const interviewFound = company.interviews.find(
       (item) => item.designation === interviewData.designation
@@ -143,6 +172,11 @@ export class CompanyRepository {
     }
   };
 
+  /**
+   * To delete a company by id from the db
+   * @param {company id from the client} companyId 
+   * @returns Object
+   */
   static delete = async (companyId) => {
     try {
       const response = await CompanyModel.findByIdAndDelete(companyId);

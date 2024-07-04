@@ -1,13 +1,18 @@
+// imports
 import { CompanyRepository } from "./company.repository.js";
 
+/**
+ * Controller class to handle the Company related requests
+ */
 export class CompanyController {
+  /**
+   * To add new company to inventory
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   addCompany = async (req, res, next) => {
     try {
-      console.log(
-        "body in companies controller add function => ",
-        req.body,
-        "\n\n\n"
-      );
       // adjust date from request
       req.body.interview = [req.body.interview];
       const company = await CompanyRepository.add(req.body);
@@ -22,6 +27,12 @@ export class CompanyController {
     }
   };
 
+  /**
+   * To get a company by id from inventory
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   getCompany = async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -35,6 +46,12 @@ export class CompanyController {
     }
   };
 
+  /**
+   * To get all companies from inventory
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   getCompanies = async (req, res, next) => {
     try {
       const companies = await CompanyRepository.getAll();
@@ -47,6 +64,12 @@ export class CompanyController {
     }
   };
 
+  /**
+   * To update a company by id
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   updateCompany = async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -61,6 +84,12 @@ export class CompanyController {
     }
   };
 
+  /**
+   * To delete a company by id from inventory
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   deleteCompany = async (req, res, next) => {
     try {
       const { id } = req.params;

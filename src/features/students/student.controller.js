@@ -3,6 +3,9 @@ import StudentRepository from "./student.repository.js";
 import { CompanyRepository } from "../companies/company.repository.js";
 import { downloadCSVMiddleware } from "../../middlewares/downloadHandler.middleware.js";
 
+/**
+ * Controller class to handle the Student related requests
+ */
 class StudentController {
   addStudent = async (req, res, next) => {
     try {

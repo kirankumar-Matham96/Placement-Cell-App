@@ -834,6 +834,163 @@ function createOptions(optionsContainerEl, list) {
   });
 }
 
+async function downloadDataCSV() {
+  try {
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${getCookie("token")}`,
+      },
+    };
+
+    const response = await fetch(
+      "http://localhost:3000/api/placement-cell/students/download",
+      options
+    );
+
+    const { data } = await response.json();
+
+    // Decode the base64-encoded CSV
+    const csv = atob(data.csv);
+
+    // Create a Blob from the CSV string
+    const blob = new Blob([csv], { type: "text/csv" });
+
+    // Create a URL for the Blob
+    const url = URL.createObjectURL(blob);
+
+    // Create a link element
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "chrome-extension-output.csv";
+
+    // Append the link to the document
+    document.body.appendChild(a);
+
+    // Trigger the download by simulating a click
+    a.click();
+
+    // Remove the link from the document
+    document.body.removeChild(a);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+async function studentResultChange(event) {
+  const data = {
+    studentId: event.target.parentElement.parentElement.getAttribute("id"),
+    interviewId:
+      event.target.parentElement.parentElement.parentElement.parentElement.getAttribute(
+        "id"
+      ),
+    companyId:
+      event.target.parentElement.parentElement.parentElement.parentElement.getAttribute(
+        "data-company-id"
+      ),
+    result: event.target.value,
+  };
+
+  const response = await updateStudentInterviewStatus(data);
+  if (response) {
+    // re-render the interviews list
+    const interviews = await getInterviews();
+    createInterviewList(interviews);
+  }
+}
+
+async function createInterviewList(interviews) {
+  interviewsListContainerEl.innerHTML = "";
+  interviews.forEach((interview) => {
+    console.log({ interview });
+    const accordionItemEl = document.createElement("div");
+    accordionItemEl.classList.add("accordion-item");
+    accordionItemEl.innerHTML = `
+    <h2 class="accordion-header">
+      <button
+      class="accordion-button"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#${interview._id}"
+      aria-expanded="false"
+      aria-controls="${interview._id}"
+      >
+      <h5>
+        ${interview.companyId.name} - ${
+      interview.position
+    } &nbsp;&nbsp;&nbsp;&nbsp; <span class="text-primary">Last Date: ${setDateFormat(
+      interview.lastDate
+    )} </span>
+        </h5>
+      </button>
+      </h2>
+      <div
+        id="${interview._id}"
+        data-company-id="${interview.companyId._id}"
+        class="accordion-collapse collapse"
+        data-bs-parent="#accordionExample"
+      >
+        <div class="accordion-body">
+        <h5>Students Allotted:</h5>
+      ${interview.students
+        .map((student) => {
+          console.log({ student });
+          return `
+          <div id="${student._id}">
+            <div>
+              <span>
+                &nbsp;&nbsp;<strong>Student Name: </strong>${student.name}<br/>
+              </span>
+              <span>
+                &nbsp;&nbsp;<strong>Batch: </strong>${student.batch}<br/>
+              </span>
+              <span>
+                &nbsp;&nbsp;<strong>Status: </strong>${student.status}<br/>
+              </span>
+            </div>
+            <div class="input-group mt-3">
+            <label class="input-group-text" for="interview-status-options"
+              >Result</label
+            >
+            <select class="form-select interview-result-change" onchange="${(
+              event
+            ) => studentResultChange(event)}">
+              <option selected>Choose...</option>
+              <option id="PASS" value="PASS">PASS</option>
+              <option id="FAIL" value="FAIL">FAIL</option>
+              <option id="On_Hold" value="On Hold">On Hold</option>
+              <option id="Did_not_Attempt" value="Didn't Attempt">Didn't Attempt</option>
+            </select>
+          </div>
+          </div>
+          <br/>
+          `;
+        })
+        .join("")}
+        </div>
+      </div>
+        `;
+
+    interviewsListContainerEl.appendChild(accordionItemEl);
+    const interviewResultStatusEls = document.querySelectorAll(
+      ".interview-result-change"
+    );
+
+    interviewResultStatusEls.forEach((select) => {
+      select.addEventListener("change", (event) => studentResultChange(event));
+    });
+  });
+}
+
+function setMinMaxDatesForInterviewSchedule(lastDate = "") {
+  // setting min date for interview allocation
+  interviewDateEl.min = new Date().toISOString().slice(0, -8);
+  // set max (upto interview last date)
+  if (lastDate) {
+    interviewDateEl.max = new Date(lastDate).toISOString().slice(0, -8);
+  }
+}
+
 // elements
 const homeBtnEl = document.querySelector("#home-link");
 const studentsBtnEl = document.querySelector("#students-link");
@@ -890,23 +1047,13 @@ const interviewOptionsContainerEl =
 const studentOptionsContainerEl = document.querySelector("#student-options");
 const jobsListContainerEl = document.querySelector("#jobs-list");
 
-function setMinMaxDatesForInterviewSchedule(lastDate = "") {
-  // setting min date for interview allocation
-  interviewDateEl.min = new Date().toISOString().slice(0, -8);
-  // set max (upto interview last date)
-  if (lastDate) {
-    interviewDateEl.max = new Date(lastDate).toISOString().slice(0, -8);
-  }
-}
 setMinMaxDatesForInterviewSchedule();
 
 /* Event Listeners */
 
-// done
 document.addEventListener("DOMContentLoaded", () => {
   userAuth();
 
-  // done
   registrationFormEl.addEventListener("submit", async (event) => {
     event.preventDefault();
     try {
@@ -922,7 +1069,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // done
   loginFormEl.addEventListener("submit", async (event) => {
     event.preventDefault();
     const response = await signIn(event);
@@ -932,7 +1078,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // done
   logoutBtnEl.addEventListener("click", () => {
     // call logout function
     signOut();
@@ -1086,8 +1231,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
-  // end (edit it before submit)
-
   homeBtnEl.addEventListener("click", () => {
     showHomePage();
   });
@@ -1161,115 +1304,6 @@ document.addEventListener("DOMContentLoaded", () => {
     createInterviewList(interviews);
   });
 
-  async function studentResultChange(event) {
-    const data = {
-      studentId: event.target.parentElement.parentElement.getAttribute("id"),
-      interviewId:
-        event.target.parentElement.parentElement.parentElement.parentElement.getAttribute(
-          "id"
-        ),
-      companyId:
-        event.target.parentElement.parentElement.parentElement.parentElement.getAttribute(
-          "data-company-id"
-        ),
-      result: event.target.value,
-    };
-
-    const response = await updateStudentInterviewStatus(data);
-    if (response) {
-      // re-render the interviews list
-      const interviews = await getInterviews();
-      createInterviewList(interviews);
-    }
-  }
-
-  async function createInterviewList(interviews) {
-    interviewsListContainerEl.innerHTML = "";
-    interviews.forEach((interview) => {
-      console.log({ interview });
-      const accordionItemEl = document.createElement("div");
-      accordionItemEl.classList.add("accordion-item");
-      accordionItemEl.innerHTML = `
-      <h2 class="accordion-header">
-        <button
-        class="accordion-button"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#${interview._id}"
-        aria-expanded="false"
-        aria-controls="${interview._id}"
-        >
-        <h5>
-          ${interview.companyId.name} - ${
-        interview.position
-      } &nbsp;&nbsp;&nbsp;&nbsp; <span class="text-primary">Last Date: ${setDateFormat(
-        interview.lastDate
-      )} </span>
-          </h5>
-        </button>
-        </h2>
-        <div
-          id="${interview._id}"
-          data-company-id="${interview.companyId._id}"
-          class="accordion-collapse collapse"
-          data-bs-parent="#accordionExample"
-        >
-          <div class="accordion-body">
-          <h5>Students Allotted:</h5>
-        ${interview.students
-          .map((student) => {
-            console.log({ student });
-            return `
-            <div id="${student._id}">
-              <div>
-                <span>
-                  &nbsp;&nbsp;<strong>Student Name: </strong>${
-                    student.name
-                  }<br/>
-                </span>
-                <span>
-                  &nbsp;&nbsp;<strong>Batch: </strong>${student.batch}<br/>
-                </span>
-                <span>
-                  &nbsp;&nbsp;<strong>Status: </strong>${student.status}<br/>
-                </span>
-              </div>
-              <div class="input-group mt-3">
-              <label class="input-group-text" for="interview-status-options"
-                >Result</label
-              >
-              <select class="form-select interview-result-change" onchange="${(
-                event
-              ) => studentResultChange(event)}">
-                <option selected>Choose...</option>
-                <option id="PASS" value="PASS">PASS</option>
-                <option id="FAIL" value="FAIL">FAIL</option>
-                <option id="On_Hold" value="On Hold">On Hold</option>
-                <option id="Did_not_Attempt" value="Didn't Attempt">Didn't Attempt</option>
-              </select>
-            </div>
-            </div>
-            <br/>
-            `;
-          })
-          .join("")}
-          </div>
-        </div>
-          `;
-
-      interviewsListContainerEl.appendChild(accordionItemEl);
-      const interviewResultStatusEls = document.querySelectorAll(
-        ".interview-result-change"
-      );
-
-      interviewResultStatusEls.forEach((select) => {
-        select.addEventListener("change", (event) =>
-          studentResultChange(event)
-        );
-      });
-    });
-  }
-
   jobsBtnEl.addEventListener("click", () => {
     if (!userAuth()) {
       alert("Please login!");
@@ -1316,51 +1350,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // after submission, it should be hidden (go to register function to handle it)
   });
 
-  // done
   loginBtnEl.addEventListener("click", () => {
     showLoginForm();
   });
 });
-
-async function downloadDataCSV() {
-  try {
-    const options = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${getCookie("token")}`,
-      },
-    };
-
-    const response = await fetch(
-      "http://localhost:3000/api/placement-cell/students/download",
-      options
-    );
-
-    const { data } = await response.json();
-
-    // Decode the base64-encoded CSV
-    const csv = atob(data.csv);
-
-    // Create a Blob from the CSV string
-    const blob = new Blob([csv], { type: "text/csv" });
-
-    // Create a URL for the Blob
-    const url = URL.createObjectURL(blob);
-
-    // Create a link element
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "chrome-extension-output.csv";
-
-    // Append the link to the document
-    document.body.appendChild(a);
-
-    // Trigger the download by simulating a click
-    a.click();
-
-    // Remove the link from the document
-    document.body.removeChild(a);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-}

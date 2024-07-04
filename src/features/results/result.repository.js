@@ -2,7 +2,15 @@
 import { ResultModel } from "./result.schema.js";
 import { ApplicationError } from "../../middlewares/errorHandling.Middleware.js";
 
+/**
+ * Repository class to handle the Result related requests
+ */
 export class ResultRepository {
+  /**
+   * To add new result to the db
+   * @param {result data from the client} data 
+   * @returns Object
+   */
   static add = async (data) => {
     try {
       const { studentId, companyId, interviewId } = data;
@@ -25,6 +33,11 @@ export class ResultRepository {
     }
   };
 
+  /**
+   * To get a result by id from the db
+   * @param {result id from the client} resultId 
+   * @returns Object
+   */
   static get = async (resultId) => {
     try {
       const result = await ResultModel.findById(resultId)
@@ -40,6 +53,10 @@ export class ResultRepository {
     }
   };
 
+  /**
+   * To get all the results from the db
+   * @returns Object
+   */
   static getAll = async () => {
     try {
       return await ResultModel.find()
@@ -51,6 +68,12 @@ export class ResultRepository {
     }
   };
 
+  /**
+   * To update result by id in the db
+   * @param {result id from the client} resultId 
+   * @param {new data from the client} data 
+   * @returns Object
+   */
   static update = async (resultId, data) => {
     try {
       const result = await ResultModel.findByIdAndUpdate(
@@ -68,6 +91,11 @@ export class ResultRepository {
     }
   };
 
+  /**
+   * To update the result by matching studentId and interviewId in the db
+   * @param {new result data from the client} data 
+   * @returns Object
+   */
   static update2 = async (data) => {
     try {
       const result = await ResultModel.findOne({
@@ -75,7 +103,6 @@ export class ResultRepository {
         interviewId: data.interviewId,
       });
 
-      console.log("in results repo => ", { result });
 
       if (!result) {
         return await this.add(data);
@@ -92,6 +119,11 @@ export class ResultRepository {
     }
   };
 
+  /**
+   * To delete a result by id from the db
+   * @param {result id from the client} resultId 
+   * @returns Object
+   */
   static delete = async (resultId) => {
     try {
       const result = await ResultModel.findByIdAndDelete(resultId);

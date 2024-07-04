@@ -1,3 +1,6 @@
+/**
+ * Custom class for handling errors
+ */
 export class ApplicationError extends Error {
   constructor(message, statusCode) {
     super(message);
@@ -5,8 +8,15 @@ export class ApplicationError extends Error {
   }
 }
 
+/**
+ * To handle errors in teh application level
+ * @param {error from the application} err
+ * @param {request} req
+ * @param {response} res
+ * @param {next middleware} next
+ */
 export const errorHandlingMiddleware = (err, req, res, next) => {
-  // Check for duplicate key error
+  // Check for duplicate key error for unique values
   if (err.code === 11000) {
     const field = Object.keys(err.keyValue)[0];
     const value = err.keyValue[field];

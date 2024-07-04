@@ -4,6 +4,12 @@ import jwt from "jsonwebtoken";
 // module imports
 import { ApplicationError } from "./errorHandling.Middleware.js";
 
+/**
+ * To authenticate user
+ * @param {request} req 
+ * @param {response} res 
+ * @param {next middleware} next 
+ */
 export const auth = (req, res, next) => {
   try {
     let token = "";

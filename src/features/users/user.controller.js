@@ -5,6 +5,9 @@ import jwt from "jsonwebtoken";
 import UserRepository from "./user.repository.js";
 import { ApplicationError } from "../../middlewares/errorHandling.Middleware.js";
 
+/**
+ * Controller class to handle the User related requests
+ */
 const JWT_SECRET = process.env.JWT_SECRET;
 class UserController {
   registerUser = async (req, res, next) => {

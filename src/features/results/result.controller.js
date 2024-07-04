@@ -1,7 +1,11 @@
+// imports
 import { ResultRepository } from "./result.repository.js";
 import { CompanyRepository } from "../companies/company.repository.js";
 import StudentRepository from "../students/student.repository.js";
 
+/**
+ * Controller class to handle the Result related requests
+ */
 export class ResultController {
   addResult = async (req, res, next) => {
     try {

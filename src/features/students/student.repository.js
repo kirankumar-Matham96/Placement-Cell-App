@@ -2,7 +2,15 @@
 import { StudentModel } from "./student.schema.js";
 import { ApplicationError } from "../../middlewares/errorHandling.Middleware.js";
 
+/**
+ * Repository class to handle the Student related requests
+ */
 class StudentRepository {
+  /**
+   * To add new student to the db
+   * @param {student data from the client} data 
+   * @returns Object
+   */
   static add = async (data) => {
     try {
       // creating new result
@@ -13,6 +21,10 @@ class StudentRepository {
     }
   };
 
+  /**
+   * To get all the students from the db
+   * @returns Object
+   */
   static getAll = async () => {
     try {
       const students = await StudentModel.find()
@@ -25,6 +37,11 @@ class StudentRepository {
     }
   };
 
+  /**
+   * To get a student by id from the db
+   * @param {student id from the client} studentId 
+   * @returns Object
+   */
   static get = async (studentId) => {
     try {
       const student = await StudentModel.findById(studentId)
@@ -40,6 +57,12 @@ class StudentRepository {
     }
   };
 
+  /**
+   * To update a student by id in the db
+   * @param {student id from the client} studentId 
+   * @param {new student data from the client} data 
+   * @returns Object
+   */
   static update = async (studentId, data) => {
     try {
       const student = await StudentModel.findById(studentId);
@@ -105,6 +128,11 @@ class StudentRepository {
     }
   };
 
+  /**
+   * To delete the student by in the db
+   * @param {student id from the client} studentId 
+   * @returns Object
+   */
   static delete = async (studentId) => {
     try {
       const response = await StudentModel.findByIdAndDelete(studentId);

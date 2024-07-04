@@ -4,7 +4,15 @@ import bcrypt from "bcrypt";
 import { UserModel } from "./user.schema.js";
 import { ApplicationError } from "../../middlewares/errorHandling.Middleware.js";
 
+/**
+ * Repository class to handle the User related requests
+ */
 class UserRepository {
+  /**
+   * To add a new user to the db
+   * @param {user data from the client} data 
+   * @returns Object
+   */
   static signUp = async (data) => {
     try {
       const newUser = await new UserModel(data).save();
@@ -16,6 +24,11 @@ class UserRepository {
     }
   };
 
+  /**
+   * To get a user by email and verify
+   * @param {user data from the client} data 
+   * @returns Boolean
+   */
   static signIn = async (data) => {
     try {
       const user = await UserModel.findOne({ email: data.email }).select(

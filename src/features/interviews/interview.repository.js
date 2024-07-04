@@ -5,7 +5,15 @@ import mongoose from "mongoose";
 import { InterviewModel } from "./interview.schema.js";
 import { ApplicationError } from "../../middlewares/errorHandling.Middleware.js";
 
+/**
+ * Repository class to handle the Interview related requests
+ */
 export class InterviewRepository {
+  /**
+   * To add new interview to the db
+   * @param {interview data from client} data 
+   * @returns Object
+   */
   static add = async (data) => {
     try {
       const interview = new InterviewModel(data);
@@ -15,6 +23,11 @@ export class InterviewRepository {
     }
   };
 
+  /**
+   * To get an interview by id from the db
+   * @param {interview id from the client} interviewId 
+   * @returns Object
+   */
   static get = async (interviewId) => {
     try {
       const response = await InterviewModel.findById(interviewId)
@@ -29,6 +42,10 @@ export class InterviewRepository {
     }
   };
 
+  /**
+   * To get all the interviews from the db
+   * @returns Object
+   */
   static getAll = async () => {
     try {
       return await InterviewModel.find()
@@ -39,6 +56,12 @@ export class InterviewRepository {
     }
   };
 
+  /**
+   * To update the interview by id in db
+   * @param {interview id from the client} interviewId 
+   * @param {new data from the client} data 
+   * @returns Object
+   */
   static update = async (interviewId, data) => {
     try {
       const interview = await InterviewModel.findById(interviewId);
@@ -79,6 +102,11 @@ export class InterviewRepository {
     }
   };
 
+  /**
+   * To delete the interview from the db
+   * @param {interview id from the client} interviewId 
+   * @returns Object
+   */
   static delete = async (interviewId) => {
     try {
       const response = await InterviewModel.findByIdAndDelete(interviewId);

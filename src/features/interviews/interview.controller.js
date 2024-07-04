@@ -3,6 +3,9 @@ import { InterviewRepository } from "./interview.repository.js";
 import { CompanyRepository } from "../companies/company.repository.js";
 import StudentRepository from "../students/student.repository.js";
 
+/**
+ * Controller class to handle the Interview related requests
+ */
 export class InterviewController {
   createInterview = async (req, res, next) => {
     try {
