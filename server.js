@@ -49,13 +49,13 @@ app.use(express.static(path.join(path.resolve(), "dist")));
 //     "Origin, X-Requested-With, Content-Type, Accept"
 //   );
 
-  // Handle preflight requests
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
+//   // Handle preflight requests
+//   if (req.method === "OPTIONS") {
+//     return res.sendStatus(200);
+//   }
 
-  next();
-});
+//   next();
+// });
 
 const getUI = (req, res, next) => {
   try {
