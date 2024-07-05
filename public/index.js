@@ -1,10 +1,14 @@
-/* API related functions */
 /* for local */
 let baseUrl = "http://localhost:3000";
 
-/* uncomment below line for live API or just comment below line */
+/**
+ * The below line is the hosted link for backend API.
+ * If you want to run the ui in local, just comment the below line.
+ * Also, add a new domain in the server.js file under the allowedOrigins object if needed.
+ */
 baseUrl = "https://placement-cell-app-9q7u.onrender.com";
 
+/* API related functions */
 /**
  * To set cookies (to store token in cookies)
  * @param {cookie name} name

@@ -2,14 +2,20 @@
 import { ResultRepository } from "./result.repository.js";
 import { CompanyRepository } from "../companies/company.repository.js";
 import StudentRepository from "../students/student.repository.js";
+import { getSession } from "../../config/db.config.js";
 
 /**
  * Controller class to handle the Result related requests
  */
 export class ResultController {
   addResult = async (req, res, next) => {
+    // starting the session
+    const session = await getSession();
     try {
       const { companyId, interviewId, studentId } = req.body;
+
+      // start transaction
+      session.startTransaction();
 
       const result = await ResultRepository.add(req.body);
       // update company
@@ -26,11 +32,18 @@ export class ResultController {
         status: result.result === "PASS" ? "placed" : "not_placed",
       });
 
+      await session.commitTransaction();
+
       res
         .status(200)
         .json({ success: true, message: "result added successfully", result });
     } catch (error) {
+      // aborting transaction on error
+      await session.abortTransaction();
       next(error);
+    } finally {
+      // End the session
+      session.endSession();
     }
   };
 
@@ -55,6 +68,12 @@ export class ResultController {
 
   updateResult = async (req, res, next) => {
     try {
+      // starting the session
+      const session = getSession();
+
+      // start transaction
+      session.startTransaction();
+
       const { id } = req.params;
       const result = await ResultRepository.update(id, req.body);
 
@@ -64,6 +83,7 @@ export class ResultController {
           status: result.result === "PASS" ? "placed" : "not_placed",
         });
       }
+      await session.commitTransaction();
 
       res.status(200).json({
         success: true,
@@ -71,12 +91,21 @@ export class ResultController {
         result,
       });
     } catch (error) {
+      await session.abortTransaction();
       next(error);
+    } finally {
+      session.endSession();
     }
   };
 
   addOrUpdateResult = async (req, res, next) => {
     try {
+      // starting the session
+      const session = getSession();
+
+      // starting the transaction
+      session.startTransaction();
+
       const result = await ResultRepository.update2(req.body);
 
       if (req.body.result) {
@@ -93,14 +122,17 @@ export class ResultController {
           resultId: result._id,
         });
       }
-
+      session.commitTransaction();
       res.status(200).json({
         success: true,
         message: "result updated successfully",
         result,
       });
     } catch (error) {
+      session.abortTransaction();
       next(error);
+    } finally {
+      session.endSession();
     }
   };
 

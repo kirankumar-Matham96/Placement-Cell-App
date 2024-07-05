@@ -39,9 +39,10 @@ app.use(express.static(path.join(path.resolve(), "dist")));
 
 const allowedOrigins = [
   "http://127.0.0.1:5500",
+  "http://localhost:3000",
   "https://placement-cell-app-9q7u.onrender.com",
   "https://placement-cell-app-ui.onrender.com",
-  // Add more allowed origins here
+  // Add more allowed origins here if you need
 ];
 
 app.use((req, res, next) => {
@@ -68,22 +69,27 @@ app.use((req, res, next) => {
   next();
 });
 
-const getUI = (req, res, next) => {
-  try {
-    const filePath = path.join(path.resolve(), "dist", "combined.html");
-    res.status(200).sendFile(filePath);
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-};
+/* 
+  Tried to send UI from the server.
+  But some errors occurred.
+  Holding this till I find the issue.
+*/
+// const getUI = (req, res, next) => {
+//   try {
+//     const filePath = path.join(path.resolve(), "dist", "combined.html");
+//     res.status(200).sendFile(filePath);
+//   } catch (error) {
+//     console.log(error);
+//     next(error);
+//   }
+// };
 
 app.use("/api/placement-cell/users", userRoutes);
 app.use("/api/placement-cell/students", auth, studentRoutes);
 app.use("/api/placement-cell/companies", auth, companyRoutes);
 app.use("/api/placement-cell/interviews", auth, interviewRoutes);
 app.use("/api/placement-cell/results", auth, resultRoutes);
-app.get("/ui", getUI);
+// app.get("/ui", getUI);
 app.get("/", (req, res, next) => {
   res.status(200).send({ message: "Welcome to Placement Cell" });
 });

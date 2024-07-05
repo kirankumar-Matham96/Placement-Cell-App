@@ -2,6 +2,7 @@
 import { InterviewRepository } from "./interview.repository.js";
 import { CompanyRepository } from "../companies/company.repository.js";
 import StudentRepository from "../students/student.repository.js";
+import { getSession } from "../../config/db.config.js";
 
 /**
  * Controller class to handle the Interview related requests
@@ -11,9 +12,6 @@ export class InterviewController {
     try {
       req.body.date = new Date(req.body.date);
       const interview = await InterviewRepository.add(req.body);
-      // await CompanyRepository.update(req.body.companyId, {
-      //   interviewId: interview._id,
-      // });
       res.status(201).json({ success: true, interview });
     } catch (error) {
       next(error);
@@ -40,10 +38,12 @@ export class InterviewController {
   };
 
   updateInterview = async (req, res, next) => {
+    const session = await getSession();
     try {
       const { id: interviewId } = req.params;
       const { studentId, companyId } = req.body;
 
+      session.startTransaction();
       // updating the interview
       const interview = await InterviewRepository.update(interviewId, req.body);
 
@@ -55,9 +55,14 @@ export class InterviewController {
         // updating the student
         await StudentRepository.update(studentId, { interviewId });
       }
+
+      await session.commitTransaction();
       res.status(200).json({ success: true, interview });
     } catch (error) {
+      await session.abortTransaction();
       next(error);
+    }finally{
+      session.endSession();
     }
   };
 
