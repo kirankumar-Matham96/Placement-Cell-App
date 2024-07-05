@@ -8,6 +8,12 @@ import { getSession } from "../../config/db.config.js";
  * Controller class to handle the Result related requests
  */
 export class ResultController {
+  /**
+   * To add a new result
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   addResult = async (req, res, next) => {
     // starting the session
     const session = await getSession();
@@ -47,6 +53,12 @@ export class ResultController {
     }
   };
 
+  /**
+   * To get all the results
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   getResults = async (req, res, next) => {
     try {
       const result = await ResultRepository.getAll();
@@ -56,6 +68,12 @@ export class ResultController {
     }
   };
 
+  /**
+   * To get a result by id
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   getResult = async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -66,11 +84,16 @@ export class ResultController {
     }
   };
 
+  /**
+   * To update a result by id
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   updateResult = async (req, res, next) => {
+    // starting the session
+    const session = getSession();
     try {
-      // starting the session
-      const session = getSession();
-
       // start transaction
       session.startTransaction();
 
@@ -98,6 +121,14 @@ export class ResultController {
     }
   };
 
+  /**
+   * To add or update result based on user activity.
+   * The update2 function will be called to add or update result,
+   * and this function does not use result id.
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   addOrUpdateResult = async (req, res, next) => {
     try {
       // starting the session
@@ -136,6 +167,12 @@ export class ResultController {
     }
   };
 
+  /**
+   * To delete a result by id
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   deleteResult = async (req, res, next) => {
     try {
       const { id } = req.params;

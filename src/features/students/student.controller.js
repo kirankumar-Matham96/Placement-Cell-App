@@ -7,6 +7,12 @@ import { downloadCSVMiddleware } from "../../middlewares/downloadHandler.middlew
  * Controller class to handle the Student related requests
  */
 class StudentController {
+  /**
+   * To add a student.
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   addStudent = async (req, res, next) => {
     try {
       const student = await StudentRepository.add(req.body);
@@ -16,6 +22,12 @@ class StudentController {
     }
   };
 
+  /**
+   * To get all the students
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   getAllStudents = async (req, res, next) => {
     try {
       const students = await StudentRepository.getAll();
@@ -25,6 +37,12 @@ class StudentController {
     }
   };
 
+  /**
+   * To get a student by id
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   getStudentById = async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -35,6 +53,12 @@ class StudentController {
     }
   };
 
+  /**
+   * To update a student by id
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   updateStudentById = async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -45,6 +69,12 @@ class StudentController {
     }
   };
 
+  /**
+   * To delete a student by id
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   deleteStudentById = async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -55,6 +85,12 @@ class StudentController {
     }
   };
 
+  /**
+   * To download students data in csv file format.
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   downloadDataInCSVFormat = async (req, res, next) => {
     try {
       // Get data

@@ -8,6 +8,12 @@ import { getSession } from "../../config/db.config.js";
  * Controller class to handle the Interview related requests
  */
 export class InterviewController {
+  /**
+   * To add new interview
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   createInterview = async (req, res, next) => {
     try {
       req.body.date = new Date(req.body.date);
@@ -18,6 +24,12 @@ export class InterviewController {
     }
   };
 
+  /**
+   * To get an interview by id
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   getInterviewById = async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -28,6 +40,12 @@ export class InterviewController {
     }
   };
 
+  /**
+   * To get all interviews available
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   getAllInterviews = async (req, res, next) => {
     try {
       const interview = await InterviewRepository.getAll();
@@ -37,6 +55,12 @@ export class InterviewController {
     }
   };
 
+  /**
+   * To update an interview by id
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   updateInterview = async (req, res, next) => {
     const session = await getSession();
     try {
@@ -61,11 +85,17 @@ export class InterviewController {
     } catch (error) {
       await session.abortTransaction();
       next(error);
-    }finally{
+    } finally {
       session.endSession();
     }
   };
 
+  /**
+   * To delete interview by id
+   * @param {request} req
+   * @param {response} res
+   * @param {next middleware} next
+   */
   deleteInterview = async (req, res, next) => {
     try {
       const { id } = req.params;
