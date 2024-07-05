@@ -40,6 +40,7 @@ app.use(express.static(path.join(path.resolve(), "dist")));
 const allowedOrigins = [
   "http://127.0.0.1:5500",
   "https://placement-cell-app-9q7u.onrender.com",
+  "https://placement-cell-app-ui.onrender.com",
   // Add more allowed origins here
 ];
 
