@@ -120,10 +120,11 @@ npm run dev
 
 5. Open your browser and navigate to `http://localhost:3000`
 
-6. Open index.html from the public folder in a browser to interact with UI
+6. Open index.html from the public folder using live server to interact with UI.
 
 #### NOTE: steps to follow in order
 
+- If the file opened without live server, it will not work and throws cors error.
 - Register
 - Login
 - Add Company from the Jobs tab (if not options will not be populated in the other tabs)
