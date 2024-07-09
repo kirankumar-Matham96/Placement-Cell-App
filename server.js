@@ -22,12 +22,14 @@ const PORT = process.env.PORT;
 // initializing express app
 const app = express();
 
-app.use(
-  cors({
-    origin: "*",
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: "*",
+//     credentials: true,
+//   })
+// );
+app.use(cors());
+
 // adding cookie parser
 app.use(cookieParser());
 
@@ -37,39 +39,39 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(path.resolve(), "dist")));
 
-const allowedOrigins = [
-  "http://127.0.0.1:5500",
-  "http://localhost:3000",
-  "https://placement-cell-app-9q7u.onrender.com",
-  "https://placement-cell-app-ui.onrender.com",
-  // Add more allowed origins here if you need
-];
+// const allowedOrigins = [
+//   "http://127.0.0.1:5500",
+//   "http://localhost:3000",
+//   "https://placement-cell-app-9q7u.onrender.com",
+//   "https://placement-cell-app-ui.onrender.com",
+//   // Add more allowed origins here if you need
+// ];
 
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
+// app.use((req, res, next) => {
+//   const origin = req.headers.origin;
 
-  console.log({ origin });
+//   console.log({ origin });
 
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  } else {
-    res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500"); // default origin
-  }
+//   if (allowedOrigins.includes(origin)) {
+//     res.setHeader("Access-Control-Allow-Origin", origin);
+//   } else {
+//     res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500"); // default origin
+//   }
 
-  res.set("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.set(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
+//   res.set("Access-Control-Allow-Credentials", "true");
+//   res.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//   res.set(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
 
-  // Handle preflight requests
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
+//   // Handle preflight requests
+//   if (req.method === "OPTIONS") {
+//     return res.sendStatus(200);
+//   }
 
-  next();
-});
+//   next();
+// });
 
 /* 
   Tried to send UI from the server.
