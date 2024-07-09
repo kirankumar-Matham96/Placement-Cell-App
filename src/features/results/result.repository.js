@@ -8,7 +8,7 @@ import { ApplicationError } from "../../middlewares/errorHandling.Middleware.js"
 export class ResultRepository {
   /**
    * To add new result to the db
-   * @param {result data from the client} data 
+   * @param {result data from the client} data
    * @returns Object
    */
   static add = async (data) => {
@@ -35,7 +35,7 @@ export class ResultRepository {
 
   /**
    * To get a result by id from the db
-   * @param {result id from the client} resultId 
+   * @param {result id from the client} resultId
    * @returns Object
    */
   static get = async (resultId) => {
@@ -70,20 +70,33 @@ export class ResultRepository {
 
   /**
    * To update result by id in the db
-   * @param {result id from the client} resultId 
-   * @param {new data from the client} data 
+   * @param {result id from the client} resultId
+   * @param {new data from the client} data
    * @returns Object
    */
   static update = async (resultId, data) => {
     try {
-      const result = await ResultModel.findByIdAndUpdate(
-        resultId,
-        { ...data },
-        { returnDocument: "after" }
-      );
+      console.log({ resultId });
+      console.log({ data });
+      const result = await ResultModel.findById(resultId);
+      // const result = await ResultModel.findByIdAndUpdate(
+      //   resultId,
+      //   { ...data },
+      //   { returnDocument: "after" }
+      // );
+
+      console.log({result});
+
       if (!result) {
         throw new ApplicationError("result ot found", 404);
       }
+
+      result.studentId = data.studentId;
+      result.companyId = data.companyId;
+      result.interviewId = data.interviewId;
+      result.result = data.result;
+
+      await result.save({ returnDocument: "after" });
 
       return result;
     } catch (error) {
@@ -93,7 +106,7 @@ export class ResultRepository {
 
   /**
    * To update the result by matching studentId and interviewId in the db
-   * @param {new result data from the client} data 
+   * @param {new result data from the client} data
    * @returns Object
    */
   static update2 = async (data) => {
@@ -102,7 +115,6 @@ export class ResultRepository {
         studentId: data.studentId,
         interviewId: data.interviewId,
       });
-
 
       if (!result) {
         return await this.add(data);
@@ -121,7 +133,7 @@ export class ResultRepository {
 
   /**
    * To delete a result by id from the db
-   * @param {result id from the client} resultId 
+   * @param {result id from the client} resultId
    * @returns Object
    */
   static delete = async (resultId) => {

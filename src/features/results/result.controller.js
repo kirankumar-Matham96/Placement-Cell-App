@@ -15,10 +15,12 @@ export class ResultController {
    * @param {next middleware} next
    */
   addResult = async (req, res, next) => {
-    // starting the session
-    const session = await getSession();
+    let session;
     try {
       const { companyId, interviewId, studentId } = req.body;
+
+      // starting the session
+      session = await getSession();
 
       // start transaction
       session.startTransaction();
@@ -92,8 +94,9 @@ export class ResultController {
    */
   updateResult = async (req, res, next) => {
     // starting the session
-    const session = getSession();
+    let session;
     try {
+      session = await getSession();
       // start transaction
       session.startTransaction();
 
@@ -130,10 +133,10 @@ export class ResultController {
    * @param {next middleware} next
    */
   addOrUpdateResult = async (req, res, next) => {
+    let session;
     try {
       // starting the session
-      const session = getSession();
-
+      session = await getSession();
       // starting the transaction
       session.startTransaction();
 
@@ -153,14 +156,14 @@ export class ResultController {
           resultId: result._id,
         });
       }
-      session.commitTransaction();
+      await session.commitTransaction();
       res.status(200).json({
         success: true,
         message: "result updated successfully",
         result,
       });
     } catch (error) {
-      session.abortTransaction();
+      await session.abortTransaction();
       next(error);
     } finally {
       session.endSession();

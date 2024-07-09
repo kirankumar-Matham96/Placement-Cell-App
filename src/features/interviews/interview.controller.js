@@ -62,8 +62,9 @@ export class InterviewController {
    * @param {next middleware} next
    */
   updateInterview = async (req, res, next) => {
-    const session = await getSession();
+    let session;
     try {
+      session = await getSession();
       const { id: interviewId } = req.params;
       const { studentId, companyId } = req.body;
 
