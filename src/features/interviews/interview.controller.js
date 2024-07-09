@@ -87,7 +87,7 @@ export class InterviewController {
       await session.abortTransaction();
       next(error);
     } finally {
-      session.endSession();
+      await session.endSession();
     }
   };
 

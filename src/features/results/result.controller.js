@@ -51,7 +51,7 @@ export class ResultController {
       next(error);
     } finally {
       // End the session
-      session.endSession();
+      await session.endSession();
     }
   };
 
@@ -120,7 +120,7 @@ export class ResultController {
       await session.abortTransaction();
       next(error);
     } finally {
-      session.endSession();
+      await session.endSession();
     }
   };
 
@@ -166,7 +166,7 @@ export class ResultController {
       await session.abortTransaction();
       next(error);
     } finally {
-      session.endSession();
+      await session.endSession();
     }
   };
 
