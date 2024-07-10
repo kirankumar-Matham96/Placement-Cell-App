@@ -21,13 +21,6 @@ const PORT = process.env.PORT;
 
 // initializing express app
 const app = express();
-
-// app.use(
-//   cors({
-//     origin: "*",
-//     credentials: true,
-//   })
-// );
 app.use(cors());
 
 // adding cookie parser
@@ -38,55 +31,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(path.resolve(), "dist")));
-
-// const allowedOrigins = [
-//   "http://127.0.0.1:5500",
-//   "http://localhost:3000",
-//   "https://placement-cell-app-9q7u.onrender.com",
-//   "https://placement-cell-app-ui.onrender.com",
-//   // Add more allowed origins here if you need
-// ];
-
-// app.use((req, res, next) => {
-//   const origin = req.headers.origin;
-
-//   console.log({ origin });
-
-//   if (allowedOrigins.includes(origin)) {
-//     res.setHeader("Access-Control-Allow-Origin", origin);
-//   } else {
-//     res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500"); // default origin
-//   }
-
-//   res.set("Access-Control-Allow-Credentials", "true");
-//   res.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-//   res.set(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-
-//   // Handle preflight requests
-//   if (req.method === "OPTIONS") {
-//     return res.sendStatus(200);
-//   }
-
-//   next();
-// });
-
-/* 
-  Tried to send UI from the server.
-  But some errors occurred.
-  Holding this till I find the issue.
-*/
-// const getUI = (req, res, next) => {
-//   try {
-//     const filePath = path.join(path.resolve(), "dist", "combined.html");
-//     res.status(200).sendFile(filePath);
-//   } catch (error) {
-//     console.log(error);
-//     next(error);
-//   }
-// };
 
 app.use("/api/placement-cell/users", userRoutes);
 app.use("/api/placement-cell/students", auth, studentRoutes);
